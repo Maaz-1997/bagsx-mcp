@@ -363,10 +363,10 @@ bagsx-mcp/
 ## Roadmap
 
 - [x] Core MCP server
-- [x] 10 trading/analytics tools
+- [x] 25 trading/analytics tools
 - [x] Read-only mode
 - [x] $BAGSX token launch
-- [ ] Price alerts
+- [x] Price alerts
 - [ ] Multi-wallet support
 - [ ] Autonomous trading mode
 - [ ] Telegram/Discord notifications
