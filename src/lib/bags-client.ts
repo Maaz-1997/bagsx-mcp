@@ -68,7 +68,7 @@ class BagsClient {
     options: RequestInit = {}
   ): Promise<BagsResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(this.apiKey && { 'x-api-key': this.apiKey }),
@@ -82,7 +82,7 @@ class BagsClient {
       });
 
       const data = await response.json() as { response?: T; error?: string };
-      
+
       if (!response.ok) {
         return {
           success: false,
@@ -152,7 +152,7 @@ class BagsClient {
     mint?: string,
     minUsd: number = 10000
   ): Promise<BagsResponse<any[]>> {
-    const endpoint = mint 
+    const endpoint = mint
       ? `/tokens/${mint}/whales?minUsd=${minUsd}`
       : `/whales?minUsd=${minUsd}`;
     return this.request<any[]>(endpoint);
@@ -228,7 +228,7 @@ class BagsClient {
     slippage: number = CONFIG.DEFAULT_SLIPPAGE,
     walletAddress?: string
   ): Promise<BagsResponse<UnsignedTransaction>> {
-    // Generate unsigned transaction - user will sign it themselves  
+    // Generate unsigned transaction - user will sign it themselves
     return this.request<UnsignedTransaction>('/trading/prepare-sell', {
       method: 'POST',
       body: JSON.stringify({

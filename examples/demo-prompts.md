@@ -45,7 +45,7 @@ Use these prompts with Claude to test the BAGSX MCP server.
 
 ### View Holdings
 ```
-"Check my portfolio" 
+"Check my portfolio"
 "What tokens am I holding?"
 "Show my P&L for this week"
 "Which of my tokens is performing best?"

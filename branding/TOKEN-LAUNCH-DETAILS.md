@@ -22,7 +22,7 @@ BAGSX - The AI Operating System for Bags.fm
 Trade crypto with Claude using natural language. BAGSX is the first MCP (Model Context Protocol) server for Bags.fm, enabling:
 
 🤖 AI-Powered Trading - Talk to Claude to discover, analyze, and trade tokens
-🔐 Zero Custody - Unsigned transactions, your keys never leave your wallet  
+🔐 Zero Custody - Unsigned transactions, your keys never leave your wallet
 📊 Real-time Intelligence - Trending tokens, whale tracking, portfolio analytics
 💰 Fee Sharing - Every trade generates creator royalties
 

@@ -43,14 +43,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // Handle tool calls
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
-  
+
   console.error(`[BAGSX] Tool called: ${name}`);
   console.error(`[BAGSX] Arguments: ${JSON.stringify(args)}`);
-  
+
   const result = await handleToolCall(name, args || {});
-  
+
   console.error(`[BAGSX] Result: ${result.isError ? 'ERROR' : 'SUCCESS'}`);
-  
+
   return result;
 });
 
@@ -123,10 +123,10 @@ async function main() {
   console.error('[BAGSX] Starting MCP Server...');
   console.error(`[BAGSX] API Key: ${CONFIG.BAGS_API_KEY ? 'Configured ✓' : 'Not configured'}`);
   console.error('[BAGSX] Security: Unsigned transactions (zero custody)');
-  
+
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  
+
   console.error('[BAGSX] Server running. Ready to accept connections.');
 }
 

@@ -32,11 +32,11 @@ Every trade on $BAGSX generates creator fees that support ongoing development.
 
 ## What is BAGSX?
 
-BAGSX is a **Model Context Protocol (MCP) server** that connects [Claude](https://claude.ai) to [Bags.fm](https://bags.fm) — the creator token launchpad on Solana. 
+BAGSX is a **Model Context Protocol (MCP) server** that connects [Claude](https://claude.ai) to [Bags.fm](https://bags.fm) — the creator token launchpad on Solana.
 
 Talk to Claude in plain English to:
 - 📈 **Discover trending tokens** and analyze projects
-- 💰 **Execute trades** with natural language commands  
+- 💰 **Execute trades** with natural language commands
 - 👀 **Track whales** and large transactions
 - 📊 **Manage portfolios** with AI-powered insights
 - 🚀 **Launch tokens** with fee sharing built-in
@@ -222,7 +222,7 @@ Claude: [Uses bags_buy tool]
 🔐 SECURE TRADE - Your keys never leave your wallet
 
 Trade prepared:
-- Buying: $NYAN  
+- Buying: $NYAN
 - Amount: $100 USD
 - Expected tokens: ~46.3 NYAN
 - Price impact: 0.12%
@@ -335,16 +335,57 @@ bagsx-mcp/
 
 ---
 
+## Analytics Dashboard
+
+BAGSX includes a **real-time analytics dashboard** for monitoring the Bags.fm ecosystem:
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **Overview** | 24h volume, active tokens, total trades, $BAGSX price |
+| **Trending** | Top tokens by volume, price change, or holders |
+| **Whales** | Track large transactions ($10K+) |
+| **Portfolio** | Enter any wallet to view holdings and P&L |
+| **Charts** | Volume over time, top performers |
+
+### Deploy to Vercel
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy (from project root)
+vercel
+
+# Or link to GitHub for auto-deploys
+```
+
+### Run Locally
+
+```bash
+# Serve the dashboard folder
+npx serve dashboard
+
+# Or use Python
+cd dashboard && python -m http.server 3000
+```
+
+Open http://localhost:3000 to view the dashboard.
+
+---
+
 ## Roadmap
 
 - [x] Core MCP server
 - [x] 10 trading/analytics tools
 - [x] Read-only mode
+- [x] $BAGSX token launch
+- [x] Analytics dashboard
 - [ ] Price alerts
 - [ ] Multi-wallet support
 - [ ] Autonomous trading mode
 - [ ] Telegram/Discord notifications
-- [ ] $BAGSX token launch
 
 ---
 

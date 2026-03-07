@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Tool definitions following MCP spec
 export const TOOL_DEFINITIONS = {
   // ==================== READ TOOLS ====================
-  
+
   bags_trending: {
     name: 'bags_trending',
     description: 'Get trending tokens on Bags.fm by volume, market cap, gainers, or losers. Use this to discover hot projects.',
