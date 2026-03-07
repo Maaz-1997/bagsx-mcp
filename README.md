@@ -40,7 +40,7 @@ Talk to Claude in plain English to:
 - 📊 **View analytics** on creators, fees, and claim events
 - ⚙️ **Configure fee sharing** with multiple wallets
 
-> **Built for the $4M Bags Hackathon** — 18 real API tools
+> **Built for the $4M Bags Hackathon** — 19 real API tools
 
 ---
 
@@ -48,7 +48,7 @@ Talk to Claude in plain English to:
 
 | Feature | Description |
 |---------|-------------|
-| **18 Real Tools** | Every tool maps to an actual Bags API endpoint |
+| **19 Real Tools** | Every tool maps to an actual Bags API endpoint |
 | **Trading** | Get quotes, execute swaps with auto-slippage |
 | **Token Launch** | Prepare metadata + create bonding curve tokens |
 | **Fee Management** | Claim fees, configure splits, transfer admin |
@@ -128,46 +128,51 @@ Restart Claude Desktop. You'll see "bagsx" in the MCP servers list.
 
 Once connected, just talk to Claude:
 
-### Discover Trending Tokens
+### Get Swap Quotes
 ```
-"What's trending on Bags right now?"
-"Show me the top gainers today"
-"Find tokens with high volume"
-```
-
-### Research Projects
-```
-"Tell me about $NYAN"
-"What's the market cap and holder count for $GAS?"
-"Show recent trades for $BTH"
+"Get a quote for swapping 0.5 SOL to BAGSX"
+"What's the price to swap 1 SOL to this token?"
+"Quote me a swap from SOL to BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS"
 ```
 
-### Portfolio Management
+### Execute Trades
 ```
-"Check my portfolio" (requires wallet address)
-"What's the P&L on my holdings?"
-"Which tokens am I holding?"
-```
-
-### Trading
-```
-"Buy $50 of $NYAN"
-"Sell half my $GAS position"
-"Get a quote for swapping 0.5 SOL to $BTH"
+"Execute that swap with my wallet 7xK2..."
+"Create a swap transaction for wallet ABC123..."
 ```
 
-### Whale Tracking
+### Launch Tokens
 ```
-"Show me whale activity"
-"Any large buys on $NYAN in the last hour?"
-"Track wallets buying over $10K"
+"Prepare a token called DEMO with symbol DMO"
+"Create token metadata with description 'My awesome project'"
+```
+
+### Claim Creator Fees
+```
+"What fees can I claim for wallet 7xK2...?"
+"Show my claimable positions"
+"Generate claim transactions for this token"
+```
+
+### Manage Fee Sharing
+```
+"Look up fee wallet for Twitter user @username"
+"Create fee share config splitting 50/50 between two wallets"
+"List tokens where I'm admin"
+```
+
+### View Analytics
+```
+"Show creators for token XYZ"
+"What are the lifetime fees for BAGSX?"
+"Get claim stats for this token mint"
 ```
 
 ---
 
 ## Tools
 
-### � Trading (2 Tools)
+### 💰 Trading (2 Tools)
 
 | Tool | Description |
 |------|-------------|
@@ -233,10 +238,10 @@ Claude: [Uses bags_quote tool]
 
 Quote details:
 - Input: 0.5 SOL (500000000 lamports)
-- Output: ~1,234.56 BAGSX
-- Price Impact: 0.12%
-- Slippage: 50 bps (auto)
-- Request ID: abc123...
+- Output: ~2,547,510,849,175,944 BAGSX
+- Price Impact: 0.002%
+- Slippage: 100 bps (1%)
+- Request ID: 64aa5700-1f3b-4127-a191-5311ab0274aa
 
 Use bags_swap with this request ID to execute the trade.
 ```
@@ -257,7 +262,7 @@ To complete: Copy to Phantom → Sign → Submit
 
 ### Launching a Token
 ```
-You: "Launch a token called DEMO with symbol DMO"
+You: "Prepare a token called DEMO with symbol DMO"
 
 Claude: [Uses bags_launch_prepare tool]
 
@@ -336,9 +341,9 @@ bagsx-mcp/
 │   ├── index.ts              # MCP server entry point
 │   ├── config.ts             # Configuration management
 │   ├── lib/
-│   │   └── bags-client-new.ts # Bags API client (18 methods)
+│   │   └── bags-client-new.ts # Bags API client (19 methods)
 │   └── tools/
-│       ├── definitions-new.ts # Tool schemas (18 tools)
+│       ├── definitions-new.ts # Tool schemas (19 tools)
 │       └── handlers-new.ts    # Tool implementations
 ├── package.json
 ├── tsconfig.json
@@ -359,7 +364,7 @@ bagsx-mcp/
 ## Roadmap
 
 - [x] Core MCP server with real API integration
-- [x] 18 working tools (trading, launch, fees, analytics)
+- [x] 19 working tools (trading, launch, fees, analytics)
 - [x] Zero custody security model
 - [x] $BAGSX token launch
 - [ ] Additional analytics as Bags API expands
