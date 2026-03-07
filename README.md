@@ -2,34 +2,70 @@
 
 <div align="center">
 
-![BAGSX Logo](https://img.shields.io/badge/BAGSX-MCP%20Server-00d4ff?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTV6Ii8+PC9zdmc+)
+<img src="https://img.shields.io/badge/BAGSX-AI%20x%20Solana-00d4ff?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTV6Ii8+PC9zdmc+" alt="BAGSX" />
 
-**Trade, launch, and manage creator tokens with Claude**
+### 🤖 "Hey Claude, swap 1 SOL for BAGSX"
 
+**The first MCP server that lets Claude trade Solana tokens for you**
+
+[![npm version](https://img.shields.io/npm/v/bagsx-mcp?style=flat-square&color=00d4ff)](https://www.npmjs.com/package/bagsx-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-[![Bags Hackathon](https://img.shields.io/badge/Bags-Hackathon%202026-ff6b6b?style=flat-square)](https://bags.fm/hackathon)
-[![$BAGSX Token](https://img.shields.io/badge/%24BAGSX-Live%20on%20Bags-00ff88?style=flat-square)](https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS)
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-9b59b6?style=flat-square)](https://modelcontextprotocol.io)
+[![Bags Hackathon](https://img.shields.io/badge/🏆%20Bags-Hackathon%202026-ff6b6b?style=flat-square)](https://bags.fm/hackathon)
+[![19 Tools](https://img.shields.io/badge/Tools-19%20Real%20APIs-00ff88?style=flat-square)](#tools)
+[![$BAGSX Token](https://img.shields.io/badge/%24BAGSX-Buy%20Now-f39c12?style=flat-square)](https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS)
 
-[Features](#features) • [Installation](#installation) • [Tools](#tools) • [$BAGSX Token](#bagsx-token)
+**[🚀 Quick Start](#quick-install) • [💰 Buy $BAGSX](#bagsx-token) • [📖 Docs](#tools) • [🎥 Demo](#demo)**
 
 </div>
 
 ---
 
-## $BAGSX Token
+## 🎥 Demo
 
-| Property | Value |
-|----------|-------|
-| **Token** | $BAGSX |
-| **Mint Address** | `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS` |
-| **Network** | Solana |
-| **Buy on Bags** | [bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS](https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS) |
+> **Coming soon:** GIF showing live Claude + BAGSX interaction
 
-Every trade on $BAGSX generates creator fees that support ongoing development.
+```
+You: "What can I claim for wallet 7xK2..."
+Claude: You have 0.57 SOL claimable across 2 tokens. Want me to generate the claim transactions?
+You: "Yes"
+Claude: Done. Copy this unsigned transaction to Phantom and sign it.
+```
+
+**Zero custody. You always hold your keys.**
+
+</div>
 
 ---
 
-## What is BAGSX?
+## 💎 $BAGSX Token
+
+<div align="center">
+
+| 🪙 Token | 📍 Mint Address | 🛒 Buy Now |
+|----------|-----------------|------------|
+| **$BAGSX** | `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS` | **[bags.fm/BAGSX](https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS)** |
+
+</div>
+
+Every trade on $BAGSX generates creator fees → Reinvested into development + hackathon prizes.
+
+---
+
+## 🔥 Why BAGSX?
+
+| Before BAGSX | With BAGSX |
+|--------------|------------|
+| ❌ Copy-paste addresses into DEX | ✅ "Claude, swap 1 SOL for BAGSX" |
+| ❌ Manually check fee claims | ✅ "What can I claim across all tokens?" |
+| ❌ Complex token launch process | ✅ "Launch a token called DEMO" |
+| ❌ Manage fee splits in code | ✅ "Split fees 50/50 with this wallet" |
+
+**This is what DeFi should feel like.** Talk to your AI, get things done.
+
+---
+
+## ✨ Features
 
 BAGSX is a **Model Context Protocol (MCP) server** that connects [Claude](https://claude.ai) to the [Bags.fm API](https://docs.bags.fm) — enabling AI-powered trading, token launches, and fee management on Solana.
 
@@ -48,11 +84,12 @@ Talk to Claude in plain English to:
 
 | Feature | Description |
 |---------|-------------|
-| **19 Real Tools** | Every tool maps to an actual Bags API endpoint |
-| **Trading** | Get quotes, execute swaps with auto-slippage |
-| **Token Launch** | Prepare metadata + create bonding curve tokens |
-| **Fee Management** | Claim fees, configure splits, transfer admin |
-| **Zero Custody** | All transactions are UNSIGNED — you sign in your wallet |
+| **🛠️ 19 Real Tools** | Every tool maps to an actual Bags API endpoint — no fake data |
+| **💱 Trading** | Get quotes, execute swaps with auto-slippage protection |
+| **🚀 Token Launch** | Prepare metadata + create bonding curve tokens in 2 commands |
+| **💸 Fee Management** | Claim fees, configure splits, transfer admin — all via chat |
+| **🔐 Zero Custody** | All transactions are UNSIGNED — you sign in your wallet |
+| **⚡ Fast** | Direct API calls, no on-chain simulation overhead |
 
 ---
 

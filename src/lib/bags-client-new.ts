@@ -135,7 +135,7 @@ interface PartnerStats {
 class BagsClient {
   private apiKey: string;
   private baseUrl: string;
-  
+
   // Quote cache for swap execution
   private quoteCache: Map<string, QuoteResponse> = new Map();
 
@@ -163,7 +163,7 @@ class BagsClient {
       });
 
       const data = await response.json() as BagsResponse<T> & { error?: string };
-      
+
       if (!response.ok) {
         return {
           success: false,
@@ -249,14 +249,14 @@ class BagsClient {
     formData.append('name', params.name);
     formData.append('symbol', params.symbol);
     formData.append('description', params.description);
-    
+
     if (params.imageUrl) formData.append('imageUrl', params.imageUrl);
     if (params.twitter) formData.append('twitter', params.twitter);
     if (params.telegram) formData.append('telegram', params.telegram);
     if (params.website) formData.append('website', params.website);
 
     const url = `${this.baseUrl}/token-launch/create-token-info`;
-    
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
