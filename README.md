@@ -49,7 +49,7 @@ Talk to Claude in plain English to:
 
 | Feature | Description |
 |---------|-------------|
-| **10 Tools** | Trending, search, portfolio, trades, whales, quotes, buy, sell, analytics |
+| **25 Tools** | Full trading suite: market data, trading, portfolio, alerts, creator tools |
 | **Solana Native** | Direct integration with Bags.fm on Solana |
 | **Fee Sharing** | Supports Bags fee sharing for creator revenue |
 | **Read + Write** | View market data OR prepare real trades |
@@ -168,25 +168,50 @@ Once connected, just talk to Claude:
 
 ## Tools
 
-### Read-Only Tools (No API key required for some)
+### 📊 Market Intelligence (8 Tools)
 
 | Tool | Description |
 |------|-------------|
 | `bags_trending` | Get trending tokens by volume, market cap, gainers, or losers |
 | `bags_search` | Search tokens by name or symbol |
 | `bags_token_info` | Get detailed token information |
-| `bags_portfolio` | View wallet holdings and performance |
-| `bags_trades` | Get recent trades for a token |
-| `bags_whales` | Track large transactions |
-| `bags_creator_earnings` | View creator royalty earnings |
+| `bags_price_history` | Historical price data (1h, 24h, 7d, 30d) |
+| `bags_new_launches` | Find newly launched tokens (last 72h) |
+| `bags_gainers_losers` | Top gainers and losers in real-time |
+| `bags_holder_analysis` | Holder distribution and whale percentage |
+| `bags_compare` | Side-by-side comparison of multiple tokens |
 
-### Trading Tools (Unsigned Transactions - Zero Custody)
+### 💰 Trading Tools (7 Tools - Zero Custody)
 
 | Tool | Description |
 |------|-------------|
 | `bags_quote` | Get price quotes without executing |
 | `bags_buy` | Prepare buy transaction (you sign in wallet) |
 | `bags_sell` | Prepare sell transaction (you sign in wallet) |
+| `bags_swap` | Token-to-token swaps |
+| `bags_limit_order` | Set limit buy/sell orders |
+| `bags_gas_estimate` | Preview transaction fees before trading |
+| `bags_slippage_check` | Calculate price impact for large orders |
+
+### 👀 Portfolio & Tracking (6 Tools)
+
+| Tool | Description |
+|------|-------------|
+| `bags_portfolio` | View wallet holdings and performance |
+| `bags_trades` | Get recent trades for a token |
+| `bags_whales` | Track large transactions |
+| `bags_watchlist` | Add/remove tokens from your watchlist |
+| `bags_price_alert` | Set price alerts for tokens |
+| `bags_pnl_report` | Generate profit/loss report for a wallet |
+
+### 🚀 Creator Tools (4 Tools)
+
+| Tool | Description |
+|------|-------------|
+| `bags_creator_earnings` | View creator royalty earnings |
+| `bags_top_creators` | Leaderboard of top-earning creators |
+| `bags_launch_token` | Launch a new token on Bags.fm |
+| `bags_airdrop` | Airdrop tokens to multiple wallets |
 
 ---
 

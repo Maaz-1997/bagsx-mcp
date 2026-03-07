@@ -177,6 +177,260 @@ async function handleToolCall(toolName, args) {
                 }
                 return formatSuccess(result.response);
             }
+            // ==================== NEW: MARKET INTELLIGENCE ====================
+            case 'bags_price_history': {
+                const input = definitions_1.PriceHistoryInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.getPriceHistory(input.token, input.period);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to fetch price history');
+                }
+                return formatSuccess({
+                    token: input.token,
+                    period: input.period,
+                    data: result.response,
+                });
+            }
+            case 'bags_new_launches': {
+                const input = definitions_1.NewLaunchesInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.getNewLaunches(input.hours, input.limit);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to fetch new launches');
+                }
+                return formatSuccess({
+                    timeframe: `Last ${input.hours} hours`,
+                    tokens: result.response,
+                });
+            }
+            case 'bags_gainers_losers': {
+                const input = definitions_1.GainersLosersInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.getGainersLosers(input.type, input.period, input.limit);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to fetch movers');
+                }
+                return formatSuccess({
+                    period: input.period,
+                    type: input.type,
+                    data: result.response,
+                });
+            }
+            case 'bags_holder_analysis': {
+                const input = definitions_1.HolderAnalysisInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.getHolderAnalysis(input.token);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to analyze holders');
+                }
+                return formatSuccess({
+                    token: input.token,
+                    analysis: result.response,
+                });
+            }
+            // ==================== NEW: TRADING ENHANCEMENTS ====================
+            case 'bags_swap': {
+                const input = definitions_1.SwapInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.prepareSwap(input.fromToken, input.toToken, input.amount, input.slippage, input.wallet);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to prepare swap');
+                }
+                const tx = result.response;
+                return formatSuccess({
+                    status: 'unsigned_transaction_ready',
+                    swap: {
+                        from: input.fromToken,
+                        to: input.toToken,
+                        inputAmount: tx?.inputAmount,
+                        outputAmount: tx?.outputAmount,
+                        priceImpact: tx?.priceImpact,
+                    },
+                    transaction: tx?.transaction,
+                    expiresAt: tx?.expiresAt,
+                    instructions: [
+                        '🔐 SECURE SIGNING - Your keys never leave your wallet',
+                        '',
+                        `Swapping ${input.amount} ${input.fromToken} → ${input.toToken}`,
+                        '1. Copy the transaction string below',
+                        '2. Sign in Phantom/Solflare/bags.fm',
+                        '3. Submit to complete the swap',
+                        '',
+                        '⏱️ Transaction expires in ~2 minutes',
+                    ].join('\\n'),
+                });
+            }
+            case 'bags_limit_order': {
+                const input = definitions_1.LimitOrderInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.setLimitOrder({
+                    token: input.token,
+                    side: input.side,
+                    price: input.price,
+                    amount: input.amount,
+                    expiry: input.expiry,
+                    wallet: input.wallet,
+                });
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to set limit order');
+                }
+                return formatSuccess({
+                    status: 'limit_order_set',
+                    order: result.response,
+                    message: `${input.side.toUpperCase()} order set for ${input.token} at $${input.price}`,
+                });
+            }
+            case 'bags_gas_estimate': {
+                const input = definitions_1.GasEstimateInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.estimateGas(input.action, input.token, input.amount);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to estimate gas');
+                }
+                return formatSuccess({
+                    action: input.action,
+                    estimate: result.response,
+                });
+            }
+            case 'bags_slippage_check': {
+                const input = definitions_1.SlippageCheckInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.checkSlippage(input.token, input.side, input.amountUsd);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to check slippage');
+                }
+                return formatSuccess({
+                    token: input.token,
+                    tradeSize: input.amountUsd,
+                    side: input.side,
+                    slippageData: result.response,
+                });
+            }
+            // ==================== NEW: PORTFOLIO & ALERTS ====================
+            case 'bags_watchlist': {
+                const input = definitions_1.WatchlistInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.manageWatchlist(input.action, input.token, input.wallet);
+                if (!result.success) {
+                    return formatError(result.error || 'Watchlist operation failed');
+                }
+                return formatSuccess({
+                    action: input.action,
+                    result: result.response,
+                });
+            }
+            case 'bags_price_alert': {
+                const input = definitions_1.PriceAlertInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.managePriceAlert({
+                    action: input.action,
+                    token: input.token,
+                    targetPrice: input.targetPrice,
+                    direction: input.direction,
+                    wallet: input.wallet,
+                });
+                if (!result.success) {
+                    return formatError(result.error || 'Alert operation failed');
+                }
+                return formatSuccess({
+                    action: input.action,
+                    result: result.response,
+                });
+            }
+            case 'bags_pnl_report': {
+                const input = definitions_1.PnlReportInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.getPnlReport(input.wallet, input.period);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to generate P&L report');
+                }
+                return formatSuccess({
+                    wallet: input.wallet,
+                    period: input.period,
+                    report: result.response,
+                });
+            }
+            case 'bags_compare': {
+                const input = definitions_1.CompareInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.compareTokens(input.tokens);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to compare tokens');
+                }
+                return formatSuccess({
+                    comparing: input.tokens,
+                    comparison: result.response,
+                });
+            }
+            // ==================== NEW: CREATOR TOOLS ====================
+            case 'bags_top_creators': {
+                const input = definitions_1.TopCreatorsInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.getTopCreators(input.metric, input.limit);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to fetch creators');
+                }
+                return formatSuccess({
+                    metric: input.metric,
+                    leaderboard: result.response,
+                });
+            }
+            case 'bags_launch_token': {
+                const input = definitions_1.LaunchTokenInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.prepareTokenLaunch({
+                    name: input.name,
+                    symbol: input.symbol,
+                    description: input.description,
+                    image: input.image,
+                    twitter: input.twitter,
+                    telegram: input.telegram,
+                    website: input.website,
+                    initialBuySol: input.initialBuySol,
+                    wallet: input.wallet,
+                });
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to prepare token launch');
+                }
+                const tx = result.response;
+                return formatSuccess({
+                    status: 'unsigned_transaction_ready',
+                    token: {
+                        name: input.name,
+                        symbol: input.symbol,
+                        estimatedMint: tx?.estimatedMint,
+                        metadataUri: tx?.metadataUri,
+                        launchFee: tx?.launchFee,
+                    },
+                    transaction: tx?.transaction,
+                    expiresAt: tx?.expiresAt,
+                    instructions: [
+                        '🚀 TOKEN LAUNCH - Sign to create your token',
+                        '',
+                        `Creating: ${input.symbol} (${input.name})`,
+                        '1. Copy the transaction string below',
+                        '2. Sign in Phantom/Solflare',
+                        '3. Submit to launch your token',
+                        '',
+                        '⏱️ Transaction expires in ~2 minutes',
+                    ].join('\\n'),
+                });
+            }
+            case 'bags_airdrop': {
+                const input = definitions_1.AirdropInputSchema.parse(args);
+                const result = await bags_client_1.bagsClient.prepareAirdrop(input.token, input.recipients, input.senderWallet);
+                if (!result.success) {
+                    return formatError(result.error || 'Failed to prepare airdrop');
+                }
+                const tx = result.response;
+                return formatSuccess({
+                    status: 'unsigned_transaction_ready',
+                    airdrop: {
+                        token: input.token,
+                        recipientCount: tx?.recipientCount,
+                        totalAmount: tx?.totalAmount,
+                        estimatedFee: tx?.estimatedFee,
+                    },
+                    transaction: tx?.transaction,
+                    expiresAt: tx?.expiresAt,
+                    instructions: [
+                        '🎁 AIRDROP - Sign to distribute tokens',
+                        '',
+                        `Sending ${input.token} to ${input.recipients.length} recipients`,
+                        '1. Copy the transaction string below',
+                        '2. Sign in Phantom/Solflare',
+                        '3. Submit to execute the airdrop',
+                        '',
+                        '⏱️ Transaction expires in ~2 minutes',
+                    ].join('\\n'),
+                });
+            }
             default:
                 return formatError(`Unknown tool: ${toolName}`);
         }

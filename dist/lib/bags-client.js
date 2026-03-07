@@ -122,7 +122,7 @@ class BagsClient {
      * Returns base64 transaction to sign - NO PRIVATE KEY NEEDED
      */
     async sell(tokenMint, amountTokens, slippage = config_1.CONFIG.DEFAULT_SLIPPAGE, walletAddress) {
-        // Generate unsigned transaction - user will sign it themselves  
+        // Generate unsigned transaction - user will sign it themselves
         return this.request('/trading/prepare-sell', {
             method: 'POST',
             body: JSON.stringify({
@@ -151,6 +151,137 @@ class BagsClient {
         return this.request('/tokens/prepare-launch', {
             method: 'POST',
             body: JSON.stringify(params),
+        });
+    }
+    // ==================== NEW: MARKET INTELLIGENCE ====================
+    /**
+     * Get historical price data for a token
+     */
+    async getPriceHistory(token, period = '24h') {
+        return this.request(`/tokens/${encodeURIComponent(token)}/price-history?period=${period}`);
+    }
+    /**
+     * Get newly launched tokens
+     */
+    async getNewLaunches(hours = 24, limit = 20) {
+        return this.request(`/tokens/new?hours=${hours}&limit=${limit}`);
+    }
+    /**
+     * Get top gainers and losers
+     */
+    async getGainersLosers(type = 'both', period = '24h', limit = 10) {
+        return this.request(`/tokens/movers?type=${type}&period=${period}&limit=${limit}`);
+    }
+    /**
+     * Analyze holder distribution for a token
+     */
+    async getHolderAnalysis(token) {
+        return this.request(`/tokens/${encodeURIComponent(token)}/holders`);
+    }
+    // ==================== NEW: TRADING ENHANCEMENTS ====================
+    /**
+     * Prepare token-to-token swap (unsigned transaction)
+     */
+    async prepareSwap(fromToken, toToken, amount, slippage = 1, wallet) {
+        return this.request('/trading/prepare-swap', {
+            method: 'POST',
+            body: JSON.stringify({
+                fromMint: fromToken,
+                toMint: toToken,
+                amount,
+                slippage,
+                walletAddress: wallet,
+            }),
+        });
+    }
+    /**
+     * Set a limit order
+     */
+    async setLimitOrder(params) {
+        return this.request('/orders/limit', {
+            method: 'POST',
+            body: JSON.stringify(params),
+        });
+    }
+    /**
+     * Estimate gas/fees for a transaction
+     */
+    async estimateGas(action, token, amount) {
+        return this.request('/trading/estimate-gas', {
+            method: 'POST',
+            body: JSON.stringify({ action, token, amount }),
+        });
+    }
+    /**
+     * Calculate slippage for a trade
+     */
+    async checkSlippage(token, side, amountUsd) {
+        return this.request('/trading/slippage-check', {
+            method: 'POST',
+            body: JSON.stringify({ token, side, amountUsd }),
+        });
+    }
+    // ==================== NEW: PORTFOLIO & ALERTS ====================
+    /**
+     * Manage watchlist
+     */
+    async manageWatchlist(action, token, wallet) {
+        return this.request('/user/watchlist', {
+            method: 'POST',
+            body: JSON.stringify({ action, token, wallet }),
+        });
+    }
+    /**
+     * Manage price alerts
+     */
+    async managePriceAlert(params) {
+        return this.request('/user/alerts', {
+            method: 'POST',
+            body: JSON.stringify(params),
+        });
+    }
+    /**
+     * Generate P&L report for a wallet
+     */
+    async getPnlReport(wallet, period = '30d') {
+        return this.request(`/portfolio/${wallet}/pnl?period=${period}`);
+    }
+    /**
+     * Compare multiple tokens side-by-side
+     */
+    async compareTokens(tokens) {
+        return this.request('/tokens/compare', {
+            method: 'POST',
+            body: JSON.stringify({ tokens }),
+        });
+    }
+    // ==================== NEW: CREATOR TOOLS ====================
+    /**
+     * Get top creators leaderboard
+     */
+    async getTopCreators(metric = 'earnings', limit = 20) {
+        return this.request(`/creators/top?metric=${metric}&limit=${limit}`);
+    }
+    /**
+     * Prepare token launch (full flow)
+     */
+    async prepareTokenLaunch(params) {
+        return this.request('/tokens/prepare-full-launch', {
+            method: 'POST',
+            body: JSON.stringify(params),
+        });
+    }
+    /**
+     * Prepare airdrop transaction
+     */
+    async prepareAirdrop(token, recipients, senderWallet) {
+        return this.request('/tokens/prepare-airdrop', {
+            method: 'POST',
+            body: JSON.stringify({
+                mint: token,
+                recipients,
+                senderWallet,
+            }),
         });
     }
 }

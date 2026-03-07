@@ -222,6 +222,410 @@ export const TOOL_DEFINITIONS = {
       required: ['token'],
     },
   },
+
+  // ==================== NEW MARKET INTELLIGENCE TOOLS ====================
+
+  bags_price_history: {
+    name: 'bags_price_history',
+    description: 'Get historical price data for a token. Useful for analyzing trends and performance over time.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        token: {
+          type: 'string',
+          description: 'Token symbol or mint address',
+        },
+        period: {
+          type: 'string',
+          enum: ['1h', '24h', '7d', '30d'],
+          description: 'Time period for price history',
+          default: '24h',
+        },
+      },
+      required: ['token'],
+    },
+  },
+
+  bags_new_launches: {
+    name: 'bags_new_launches',
+    description: 'Get newly launched tokens on Bags.fm. Great for finding early opportunities.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        hours: {
+          type: 'number',
+          description: 'How far back to look (in hours, max 72)',
+          default: 24,
+        },
+        limit: {
+          type: 'number',
+          description: 'Number of results (1-50)',
+          default: 20,
+        },
+      },
+      required: [],
+    },
+  },
+
+  bags_gainers_losers: {
+    name: 'bags_gainers_losers',
+    description: 'Get top gainers and losers in real-time. Shows tokens with biggest price movements.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        type: {
+          type: 'string',
+          enum: ['gainers', 'losers', 'both'],
+          description: 'Which list to fetch',
+          default: 'both',
+        },
+        period: {
+          type: 'string',
+          enum: ['1h', '24h', '7d'],
+          description: 'Time period for price change calculation',
+          default: '24h',
+        },
+        limit: {
+          type: 'number',
+          description: 'Number of results per category (1-25)',
+          default: 10,
+        },
+      },
+      required: [],
+    },
+  },
+
+  bags_holder_analysis: {
+    name: 'bags_holder_analysis',
+    description: 'Analyze holder distribution for a token. Shows whale vs retail breakdown and concentration.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        token: {
+          type: 'string',
+          description: 'Token symbol or mint address',
+        },
+      },
+      required: ['token'],
+    },
+  },
+
+  // ==================== TRADING ENHANCEMENT TOOLS ====================
+
+  bags_swap: {
+    name: 'bags_swap',
+    description: 'Prepare a token-to-token swap (not just SOL). Returns unsigned transaction for user to sign.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        fromToken: {
+          type: 'string',
+          description: 'Input token symbol or mint',
+        },
+        toToken: {
+          type: 'string',
+          description: 'Output token symbol or mint',
+        },
+        amount: {
+          type: 'number',
+          description: 'Amount of input token to swap',
+        },
+        slippage: {
+          type: 'number',
+          description: 'Max slippage tolerance as percentage',
+          default: 1,
+        },
+        wallet: {
+          type: 'string',
+          description: 'Wallet address for transaction',
+        },
+      },
+      required: ['fromToken', 'toToken', 'amount'],
+    },
+  },
+
+  bags_limit_order: {
+    name: 'bags_limit_order',
+    description: 'Set a limit buy or sell order. Order executes when price target is reached.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        token: {
+          type: 'string',
+          description: 'Token symbol or mint address',
+        },
+        side: {
+          type: 'string',
+          enum: ['buy', 'sell'],
+          description: 'Order side',
+        },
+        price: {
+          type: 'number',
+          description: 'Target price in USD',
+        },
+        amount: {
+          type: 'number',
+          description: 'Amount in tokens (for sell) or USD (for buy)',
+        },
+        expiry: {
+          type: 'string',
+          enum: ['1h', '24h', '7d', '30d'],
+          description: 'Order expiration time',
+          default: '24h',
+        },
+        wallet: {
+          type: 'string',
+          description: 'Wallet address',
+        },
+      },
+      required: ['token', 'side', 'price', 'amount'],
+    },
+  },
+
+  bags_gas_estimate: {
+    name: 'bags_gas_estimate',
+    description: 'Preview transaction fees before trading. Shows estimated SOL cost for any trade.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        action: {
+          type: 'string',
+          enum: ['buy', 'sell', 'swap', 'launch'],
+          description: 'Type of transaction',
+        },
+        token: {
+          type: 'string',
+          description: 'Token involved (optional for launch)',
+        },
+        amount: {
+          type: 'number',
+          description: 'Trade amount (in USD for buy, tokens for sell)',
+        },
+      },
+      required: ['action'],
+    },
+  },
+
+  bags_slippage_check: {
+    name: 'bags_slippage_check',
+    description: 'Calculate expected slippage for large orders. Helps avoid excessive price impact.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        token: {
+          type: 'string',
+          description: 'Token symbol or mint address',
+        },
+        side: {
+          type: 'string',
+          enum: ['buy', 'sell'],
+          description: 'Trade direction',
+        },
+        amountUsd: {
+          type: 'number',
+          description: 'Trade size in USD',
+        },
+      },
+      required: ['token', 'side', 'amountUsd'],
+    },
+  },
+
+  // ==================== PORTFOLIO & ALERTS TOOLS ====================
+
+  bags_watchlist: {
+    name: 'bags_watchlist',
+    description: 'Manage a watchlist of tokens to track. Add, remove, or view watched tokens.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        action: {
+          type: 'string',
+          enum: ['add', 'remove', 'list'],
+          description: 'Watchlist action',
+        },
+        token: {
+          type: 'string',
+          description: 'Token to add/remove (not needed for list)',
+        },
+        wallet: {
+          type: 'string',
+          description: 'Wallet address (for persistent storage)',
+        },
+      },
+      required: ['action'],
+    },
+  },
+
+  bags_price_alert: {
+    name: 'bags_price_alert',
+    description: 'Set price alerts for tokens. Get notified when price targets are hit.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        action: {
+          type: 'string',
+          enum: ['set', 'remove', 'list'],
+          description: 'Alert action',
+        },
+        token: {
+          type: 'string',
+          description: 'Token symbol or mint',
+        },
+        targetPrice: {
+          type: 'number',
+          description: 'Price target in USD',
+        },
+        direction: {
+          type: 'string',
+          enum: ['above', 'below'],
+          description: 'Alert when price goes above or below target',
+        },
+        wallet: {
+          type: 'string',
+          description: 'Wallet address for alert association',
+        },
+      },
+      required: ['action'],
+    },
+  },
+
+  bags_pnl_report: {
+    name: 'bags_pnl_report',
+    description: 'Generate a profit/loss report for a wallet. Shows realized and unrealized gains.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        wallet: {
+          type: 'string',
+          description: 'Solana wallet address',
+        },
+        period: {
+          type: 'string',
+          enum: ['24h', '7d', '30d', 'all'],
+          description: 'Report period',
+          default: '30d',
+        },
+      },
+      required: ['wallet'],
+    },
+  },
+
+  bags_compare: {
+    name: 'bags_compare',
+    description: 'Side-by-side comparison of 2 or more tokens. Shows key metrics for decision making.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        tokens: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Array of token symbols or mints to compare (2-5)',
+        },
+      },
+      required: ['tokens'],
+    },
+  },
+
+  // ==================== CREATOR TOOLS ====================
+
+  bags_top_creators: {
+    name: 'bags_top_creators',
+    description: 'Get leaderboard of top-earning creators on Bags.fm.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        metric: {
+          type: 'string',
+          enum: ['earnings', 'volume', 'holders'],
+          description: 'Ranking metric',
+          default: 'earnings',
+        },
+        limit: {
+          type: 'number',
+          description: 'Number of results (1-50)',
+          default: 20,
+        },
+      },
+      required: [],
+    },
+  },
+
+  bags_launch_token: {
+    name: 'bags_launch_token',
+    description: 'Prepare a new token launch on Bags.fm. Returns unsigned transaction for user to sign.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        name: {
+          type: 'string',
+          description: 'Token name',
+        },
+        symbol: {
+          type: 'string',
+          description: 'Token symbol (1-10 chars)',
+        },
+        description: {
+          type: 'string',
+          description: 'Token description',
+        },
+        image: {
+          type: 'string',
+          description: 'Image URL for token',
+        },
+        twitter: {
+          type: 'string',
+          description: 'Twitter handle (optional)',
+        },
+        telegram: {
+          type: 'string',
+          description: 'Telegram link (optional)',
+        },
+        website: {
+          type: 'string',
+          description: 'Website URL (optional)',
+        },
+        initialBuySol: {
+          type: 'number',
+          description: 'Initial SOL to buy at launch (optional)',
+        },
+        wallet: {
+          type: 'string',
+          description: 'Creator wallet address',
+        },
+      },
+      required: ['name', 'symbol', 'description'],
+    },
+  },
+
+  bags_airdrop: {
+    name: 'bags_airdrop',
+    description: 'Prepare an airdrop of tokens to multiple wallets. Returns unsigned transaction.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        token: {
+          type: 'string',
+          description: 'Token mint to airdrop',
+        },
+        recipients: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              wallet: { type: 'string' },
+              amount: { type: 'number' },
+            },
+          },
+          description: 'Array of recipient wallets and amounts',
+        },
+        senderWallet: {
+          type: 'string',
+          description: 'Sender wallet address',
+        },
+      },
+      required: ['token', 'recipients'],
+    },
+  },
 };
 
 // Zod schemas for runtime validation
@@ -277,4 +681,110 @@ export const SellInputSchema = z.object({
 
 export const CreatorEarningsInputSchema = z.object({
   token: z.string().min(1),
+});
+
+// ==================== NEW MARKET INTELLIGENCE SCHEMAS ====================
+
+export const PriceHistoryInputSchema = z.object({
+  token: z.string().min(1),
+  period: z.enum(['1h', '24h', '7d', '30d']).optional().default('24h'),
+});
+
+export const NewLaunchesInputSchema = z.object({
+  hours: z.number().min(1).max(72).optional().default(24),
+  limit: z.number().min(1).max(50).optional().default(20),
+});
+
+export const GainersLosersInputSchema = z.object({
+  type: z.enum(['gainers', 'losers', 'both']).optional().default('both'),
+  period: z.enum(['1h', '24h', '7d']).optional().default('24h'),
+  limit: z.number().min(1).max(25).optional().default(10),
+});
+
+export const HolderAnalysisInputSchema = z.object({
+  token: z.string().min(1),
+});
+
+// ==================== TRADING ENHANCEMENT SCHEMAS ====================
+
+export const SwapInputSchema = z.object({
+  fromToken: z.string().min(1),
+  toToken: z.string().min(1),
+  amount: z.number().positive(),
+  slippage: z.number().min(0).max(50).optional().default(1),
+  wallet: z.string().min(32).max(44).optional(),
+});
+
+export const LimitOrderInputSchema = z.object({
+  token: z.string().min(1),
+  side: z.enum(['buy', 'sell']),
+  price: z.number().positive(),
+  amount: z.number().positive(),
+  expiry: z.enum(['1h', '24h', '7d', '30d']).optional().default('24h'),
+  wallet: z.string().min(32).max(44).optional(),
+});
+
+export const GasEstimateInputSchema = z.object({
+  action: z.enum(['buy', 'sell', 'swap', 'launch']),
+  token: z.string().optional(),
+  amount: z.number().optional(),
+});
+
+export const SlippageCheckInputSchema = z.object({
+  token: z.string().min(1),
+  side: z.enum(['buy', 'sell']),
+  amountUsd: z.number().positive(),
+});
+
+// ==================== PORTFOLIO & ALERTS SCHEMAS ====================
+
+export const WatchlistInputSchema = z.object({
+  action: z.enum(['add', 'remove', 'list']),
+  token: z.string().optional(),
+  wallet: z.string().min(32).max(44).optional(),
+});
+
+export const PriceAlertInputSchema = z.object({
+  action: z.enum(['set', 'remove', 'list']),
+  token: z.string().optional(),
+  targetPrice: z.number().positive().optional(),
+  direction: z.enum(['above', 'below']).optional(),
+  wallet: z.string().min(32).max(44).optional(),
+});
+
+export const PnlReportInputSchema = z.object({
+  wallet: z.string().min(32).max(44),
+  period: z.enum(['24h', '7d', '30d', 'all']).optional().default('30d'),
+});
+
+export const CompareInputSchema = z.object({
+  tokens: z.array(z.string()).min(2).max(5),
+});
+
+// ==================== CREATOR SCHEMAS ====================
+
+export const TopCreatorsInputSchema = z.object({
+  metric: z.enum(['earnings', 'volume', 'holders']).optional().default('earnings'),
+  limit: z.number().min(1).max(50).optional().default(20),
+});
+
+export const LaunchTokenInputSchema = z.object({
+  name: z.string().min(1).max(30),
+  symbol: z.string().min(1).max(10),
+  description: z.string().min(1).max(500),
+  image: z.string().url().optional(),
+  twitter: z.string().optional(),
+  telegram: z.string().optional(),
+  website: z.string().url().optional(),
+  initialBuySol: z.number().positive().optional(),
+  wallet: z.string().min(32).max(44).optional(),
+});
+
+export const AirdropInputSchema = z.object({
+  token: z.string().min(1),
+  recipients: z.array(z.object({
+    wallet: z.string().min(32).max(44),
+    amount: z.number().positive(),
+  })).min(1).max(100),
+  senderWallet: z.string().min(32).max(44).optional(),
 });

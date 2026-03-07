@@ -281,6 +281,366 @@ class BagsClient {
       body: JSON.stringify(params),
     });
   }
+
+  // ==================== NEW: MARKET INTELLIGENCE ====================
+
+  /**
+   * Get historical price data for a token
+   */
+  async getPriceHistory(
+    token: string,
+    period: '1h' | '24h' | '7d' | '30d' = '24h'
+  ): Promise<BagsResponse<{
+    token: string;
+    period: string;
+    prices: Array<{ timestamp: number; price: number; volume: number }>;
+    priceChange: number;
+    high: number;
+    low: number;
+  }>> {
+    return this.request(`/tokens/${encodeURIComponent(token)}/price-history?period=${period}`);
+  }
+
+  /**
+   * Get newly launched tokens
+   */
+  async getNewLaunches(
+    hours: number = 24,
+    limit: number = 20
+  ): Promise<BagsResponse<Array<{
+    mint: string;
+    name: string;
+    symbol: string;
+    creator: string;
+    launchedAt: string;
+    initialMarketCap: number;
+    currentMarketCap: number;
+    priceChange: number;
+    volume24h: number;
+    holders: number;
+  }>>> {
+    return this.request(`/tokens/new?hours=${hours}&limit=${limit}`);
+  }
+
+  /**
+   * Get top gainers and losers
+   */
+  async getGainersLosers(
+    type: 'gainers' | 'losers' | 'both' = 'both',
+    period: '1h' | '24h' | '7d' = '24h',
+    limit: number = 10
+  ): Promise<BagsResponse<{
+    gainers?: Array<{ mint: string; symbol: string; name: string; priceChange: number; volume: number }>;
+    losers?: Array<{ mint: string; symbol: string; name: string; priceChange: number; volume: number }>;
+  }>> {
+    return this.request(`/tokens/movers?type=${type}&period=${period}&limit=${limit}`);
+  }
+
+  /**
+   * Analyze holder distribution for a token
+   */
+  async getHolderAnalysis(token: string): Promise<BagsResponse<{
+    totalHolders: number;
+    top10Concentration: number;
+    top50Concentration: number;
+    whaleCount: number;
+    retailCount: number;
+    distribution: Array<{
+      range: string;
+      count: number;
+      percentage: number;
+    }>;
+    topHolders: Array<{
+      wallet: string;
+      balance: number;
+      percentage: number;
+    }>;
+  }>> {
+    return this.request(`/tokens/${encodeURIComponent(token)}/holders`);
+  }
+
+  // ==================== NEW: TRADING ENHANCEMENTS ====================
+
+  /**
+   * Prepare token-to-token swap (unsigned transaction)
+   */
+  async prepareSwap(
+    fromToken: string,
+    toToken: string,
+    amount: number,
+    slippage: number = 1,
+    wallet?: string
+  ): Promise<BagsResponse<UnsignedTransaction & {
+    inputAmount: number;
+    outputAmount: number;
+    priceImpact: number;
+  }>> {
+    return this.request<UnsignedTransaction & {
+      inputAmount: number;
+      outputAmount: number;
+      priceImpact: number;
+    }>('/trading/prepare-swap', {
+      method: 'POST',
+      body: JSON.stringify({
+        fromMint: fromToken,
+        toMint: toToken,
+        amount,
+        slippage,
+        walletAddress: wallet,
+      }),
+    });
+  }
+
+  /**
+   * Set a limit order
+   */
+  async setLimitOrder(params: {
+    token: string;
+    side: 'buy' | 'sell';
+    price: number;
+    amount: number;
+    expiry: string;
+    wallet?: string;
+  }): Promise<BagsResponse<{
+    orderId: string;
+    token: string;
+    side: string;
+    targetPrice: number;
+    amount: number;
+    expiresAt: string;
+    status: 'active' | 'pending';
+  }>> {
+    return this.request('/orders/limit', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  }
+
+  /**
+   * Estimate gas/fees for a transaction
+   */
+  async estimateGas(
+    action: 'buy' | 'sell' | 'swap' | 'launch',
+    token?: string,
+    amount?: number
+  ): Promise<BagsResponse<{
+    estimatedFee: number;
+    feeInSol: number;
+    feeInUsd: number;
+    networkCongestion: 'low' | 'medium' | 'high';
+    priorityFee: number;
+  }>> {
+    return this.request('/trading/estimate-gas', {
+      method: 'POST',
+      body: JSON.stringify({ action, token, amount }),
+    });
+  }
+
+  /**
+   * Calculate slippage for a trade
+   */
+  async checkSlippage(
+    token: string,
+    side: 'buy' | 'sell',
+    amountUsd: number
+  ): Promise<BagsResponse<{
+    expectedSlippage: number;
+    priceImpact: number;
+    recommendedSlippage: number;
+    liquidity: number;
+    warning: string | null;
+  }>> {
+    return this.request('/trading/slippage-check', {
+      method: 'POST',
+      body: JSON.stringify({ token, side, amountUsd }),
+    });
+  }
+
+  // ==================== NEW: PORTFOLIO & ALERTS ====================
+
+  /**
+   * Manage watchlist
+   */
+  async manageWatchlist(
+    action: 'add' | 'remove' | 'list',
+    token?: string,
+    wallet?: string
+  ): Promise<BagsResponse<{
+    action: string;
+    watchlist?: Array<{
+      mint: string;
+      symbol: string;
+      name: string;
+      addedAt: string;
+      priceAtAdd: number;
+      currentPrice: number;
+      change: number;
+    }>;
+    success?: boolean;
+  }>> {
+    return this.request('/user/watchlist', {
+      method: 'POST',
+      body: JSON.stringify({ action, token, wallet }),
+    });
+  }
+
+  /**
+   * Manage price alerts
+   */
+  async managePriceAlert(params: {
+    action: 'set' | 'remove' | 'list';
+    token?: string;
+    targetPrice?: number;
+    direction?: 'above' | 'below';
+    wallet?: string;
+  }): Promise<BagsResponse<{
+    action: string;
+    alerts?: Array<{
+      id: string;
+      token: string;
+      targetPrice: number;
+      direction: string;
+      currentPrice: number;
+      createdAt: string;
+    }>;
+    success?: boolean;
+  }>> {
+    return this.request('/user/alerts', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  }
+
+  /**
+   * Generate P&L report for a wallet
+   */
+  async getPnlReport(
+    wallet: string,
+    period: '24h' | '7d' | '30d' | 'all' = '30d'
+  ): Promise<BagsResponse<{
+    wallet: string;
+    period: string;
+    summary: {
+      totalInvested: number;
+      currentValue: number;
+      realizedPnl: number;
+      unrealizedPnl: number;
+      totalPnl: number;
+      percentageReturn: number;
+    };
+    byToken: Array<{
+      token: string;
+      symbol: string;
+      invested: number;
+      currentValue: number;
+      pnl: number;
+      percentageReturn: number;
+    }>;
+    trades: number;
+    winRate: number;
+  }>> {
+    return this.request(`/portfolio/${wallet}/pnl?period=${period}`);
+  }
+
+  /**
+   * Compare multiple tokens side-by-side
+   */
+  async compareTokens(tokens: string[]): Promise<BagsResponse<Array<{
+    mint: string;
+    symbol: string;
+    name: string;
+    price: number;
+    marketCap: number;
+    volume24h: number;
+    priceChange24h: number;
+    priceChange7d: number;
+    holders: number;
+    liquidity: number;
+    creatorEarnings: number;
+  }>>> {
+    return this.request('/tokens/compare', {
+      method: 'POST',
+      body: JSON.stringify({ tokens }),
+    });
+  }
+
+  // ==================== NEW: CREATOR TOOLS ====================
+
+  /**
+   * Get top creators leaderboard
+   */
+  async getTopCreators(
+    metric: 'earnings' | 'volume' | 'holders' = 'earnings',
+    limit: number = 20
+  ): Promise<BagsResponse<Array<{
+    wallet: string;
+    displayName: string;
+    avatar: string;
+    tokenCount: number;
+    totalEarnings: number;
+    totalVolume: number;
+    totalHolders: number;
+    topToken: {
+      symbol: string;
+      mint: string;
+    };
+  }>>> {
+    return this.request(`/creators/top?metric=${metric}&limit=${limit}`);
+  }
+
+  /**
+   * Prepare token launch (full flow)
+   */
+  async prepareTokenLaunch(params: {
+    name: string;
+    symbol: string;
+    description: string;
+    image?: string;
+    twitter?: string;
+    telegram?: string;
+    website?: string;
+    initialBuySol?: number;
+    wallet?: string;
+  }): Promise<BagsResponse<UnsignedTransaction & {
+    metadataUri: string;
+    estimatedMint: string;
+    launchFee: number;
+  }>> {
+    return this.request<UnsignedTransaction & {
+      metadataUri: string;
+      estimatedMint: string;
+      launchFee: number;
+    }>('/tokens/prepare-full-launch', {
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+  }
+
+  /**
+   * Prepare airdrop transaction
+   */
+  async prepareAirdrop(
+    token: string,
+    recipients: Array<{ wallet: string; amount: number }>,
+    senderWallet?: string
+  ): Promise<BagsResponse<UnsignedTransaction & {
+    totalAmount: number;
+    recipientCount: number;
+    estimatedFee: number;
+  }>> {
+    return this.request<UnsignedTransaction & {
+      totalAmount: number;
+      recipientCount: number;
+      estimatedFee: number;
+    }>('/tokens/prepare-airdrop', {
+      method: 'POST',
+      body: JSON.stringify({
+        mint: token,
+        recipients,
+        senderWallet,
+      }),
+    });
+  }
 }
 
 export const bagsClient = new BagsClient();
