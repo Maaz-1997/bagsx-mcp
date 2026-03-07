@@ -592,6 +592,150 @@ export declare const TOOL_DEFINITIONS: {
             required: string[];
         };
     };
+    bags_wallet_add: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {
+                wallet: {
+                    type: string;
+                    description: string;
+                };
+                alias: {
+                    type: string;
+                    description: string;
+                };
+            };
+            required: string[];
+        };
+    };
+    bags_wallet_remove: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {
+                walletOrAlias: {
+                    type: string;
+                    description: string;
+                };
+            };
+            required: string[];
+        };
+    };
+    bags_wallet_list: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {};
+            required: never[];
+        };
+    };
+    bags_wallet_set_default: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {
+                walletOrAlias: {
+                    type: string;
+                    description: string;
+                };
+            };
+            required: string[];
+        };
+    };
+    bags_portfolio_all: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {
+                groupBy: {
+                    type: string;
+                    enum: string[];
+                    description: string;
+                    default: string;
+                };
+            };
+            required: never[];
+        };
+    };
+    bags_notify_telegram: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {
+                action: {
+                    type: string;
+                    enum: string[];
+                    description: string;
+                };
+                chatId: {
+                    type: string;
+                    description: string;
+                };
+            };
+            required: string[];
+        };
+    };
+    bags_notify_discord: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {
+                action: {
+                    type: string;
+                    enum: string[];
+                    description: string;
+                };
+                webhookUrl: {
+                    type: string;
+                    description: string;
+                };
+            };
+            required: string[];
+        };
+    };
+    bags_notification_settings: {
+        name: string;
+        description: string;
+        inputSchema: {
+            type: "object";
+            properties: {
+                action: {
+                    type: string;
+                    enum: string[];
+                    description: string;
+                };
+                priceAlerts: {
+                    type: string;
+                    description: string;
+                };
+                whaleAlerts: {
+                    type: string;
+                    description: string;
+                };
+                tradeConfirmations: {
+                    type: string;
+                    description: string;
+                };
+                newLaunches: {
+                    type: string;
+                    description: string;
+                };
+                portfolioDaily: {
+                    type: string;
+                    description: string;
+                };
+            };
+            required: string[];
+        };
+    };
 };
 export declare const TrendingInputSchema: z.ZodObject<{
     metric: z.ZodDefault<z.ZodOptional<z.ZodEnum<["volume", "marketCap", "gainers", "losers"]>>>;
@@ -929,5 +1073,79 @@ export declare const AirdropInputSchema: z.ZodObject<{
         amount: number;
     }[];
     senderWallet?: string | undefined;
+}>;
+export declare const WalletAddInputSchema: z.ZodObject<{
+    wallet: z.ZodString;
+    alias: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    wallet: string;
+    alias?: string | undefined;
+}, {
+    wallet: string;
+    alias?: string | undefined;
+}>;
+export declare const WalletRemoveInputSchema: z.ZodObject<{
+    walletOrAlias: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    walletOrAlias: string;
+}, {
+    walletOrAlias: string;
+}>;
+export declare const WalletListInputSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
+export declare const WalletSetDefaultInputSchema: z.ZodObject<{
+    walletOrAlias: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    walletOrAlias: string;
+}, {
+    walletOrAlias: string;
+}>;
+export declare const PortfolioAllInputSchema: z.ZodObject<{
+    groupBy: z.ZodDefault<z.ZodOptional<z.ZodEnum<["token", "wallet"]>>>;
+}, "strip", z.ZodTypeAny, {
+    groupBy: "token" | "wallet";
+}, {
+    groupBy?: "token" | "wallet" | undefined;
+}>;
+export declare const NotifyTelegramInputSchema: z.ZodObject<{
+    action: z.ZodEnum<["setup", "test", "remove", "status"]>;
+    chatId: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    action: "remove" | "setup" | "test" | "status";
+    chatId?: string | undefined;
+}, {
+    action: "remove" | "setup" | "test" | "status";
+    chatId?: string | undefined;
+}>;
+export declare const NotifyDiscordInputSchema: z.ZodObject<{
+    action: z.ZodEnum<["setup", "test", "remove", "status"]>;
+    webhookUrl: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    action: "remove" | "setup" | "test" | "status";
+    webhookUrl?: string | undefined;
+}, {
+    action: "remove" | "setup" | "test" | "status";
+    webhookUrl?: string | undefined;
+}>;
+export declare const NotificationSettingsInputSchema: z.ZodObject<{
+    action: z.ZodEnum<["get", "update"]>;
+    priceAlerts: z.ZodOptional<z.ZodBoolean>;
+    whaleAlerts: z.ZodOptional<z.ZodBoolean>;
+    tradeConfirmations: z.ZodOptional<z.ZodBoolean>;
+    newLaunches: z.ZodOptional<z.ZodBoolean>;
+    portfolioDaily: z.ZodOptional<z.ZodBoolean>;
+}, "strip", z.ZodTypeAny, {
+    action: "get" | "update";
+    priceAlerts?: boolean | undefined;
+    whaleAlerts?: boolean | undefined;
+    tradeConfirmations?: boolean | undefined;
+    newLaunches?: boolean | undefined;
+    portfolioDaily?: boolean | undefined;
+}, {
+    action: "get" | "update";
+    priceAlerts?: boolean | undefined;
+    whaleAlerts?: boolean | undefined;
+    tradeConfirmations?: boolean | undefined;
+    newLaunches?: boolean | undefined;
+    portfolioDaily?: boolean | undefined;
 }>;
 //# sourceMappingURL=definitions.d.ts.map

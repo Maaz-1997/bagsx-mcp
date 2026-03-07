@@ -49,10 +49,10 @@ Talk to Claude in plain English to:
 
 | Feature | Description |
 |---------|-------------|
-| **25 Tools** | Full trading suite: market data, trading, portfolio, alerts, creator tools |
+| **33 Tools** | Full trading suite: market data, trading, portfolio, alerts, notifications |
+| **Multi-Wallet** | Manage multiple wallets in one session |
+| **Notifications** | Telegram & Discord real-time alerts |
 | **Solana Native** | Direct integration with Bags.fm on Solana |
-| **Fee Sharing** | Supports Bags fee sharing for creator revenue |
-| **Read + Write** | View market data OR prepare real trades |
 | **Zero Custody** | NO private keys needed - you sign in your own wallet |
 
 ---
@@ -213,6 +213,104 @@ Once connected, just talk to Claude:
 | `bags_launch_token` | Launch a new token on Bags.fm |
 | `bags_airdrop` | Airdrop tokens to multiple wallets |
 
+### 👛 Multi-Wallet Tools (5 Tools)
+
+| Tool | Description |
+|------|-------------|
+| `bags_wallet_add` | Add a wallet to your session with optional alias |
+| `bags_wallet_remove` | Remove a wallet from your session |
+| `bags_wallet_list` | List all wallets with balances |
+| `bags_wallet_set_default` | Set default wallet for trades |
+| `bags_portfolio_all` | Combined portfolio across all wallets |
+
+### 🔔 Notification Tools (3 Tools)
+
+| Tool | Description |
+|------|-------------|
+| `bags_notify_telegram` | Setup Telegram notifications |
+| `bags_notify_discord` | Setup Discord webhook notifications |
+| `bags_notification_settings` | Configure what alerts you receive |
+
+---
+
+## Multi-Wallet Setup
+
+Manage multiple wallets in a single session:
+
+```
+"Add my trading wallet 7xK2...abc as 'trading'"
+"Add my cold wallet 9mN4...xyz as 'hodl'"
+"List my wallets"
+"Show combined portfolio across all wallets"
+"Set trading as my default wallet"
+"Buy $100 NYAN from my hodl wallet"
+```
+
+**How it works:**
+1. Add wallets with aliases for easy reference
+2. Set a default wallet for trades
+3. View combined portfolio across all wallets
+4. Specify which wallet to use per trade
+
+---
+
+## Telegram Notifications Setup
+
+Get real-time alerts on Telegram:
+
+### Step 1: Start the Bot
+1. Open Telegram
+2. Search for `@BagsXBot`
+3. Tap **Start** or send `/start`
+4. The bot replies with your **Chat ID** (a number like `123456789`)
+
+### Step 2: Connect to BAGSX
+Tell Claude:
+```
+"Setup Telegram notifications with chat ID 123456789"
+```
+
+### Step 3: Configure Alerts
+```
+"Enable price alerts and whale notifications on Telegram"
+"Disable daily portfolio summary"
+"Send me a test notification"
+```
+
+### What You'll Receive
+- 🔔 Price alerts when targets are hit
+- 🐋 Whale activity on your watched tokens
+- ✅ Trade confirmations
+- 🚀 New token launches
+- 📊 Daily portfolio summaries
+
+---
+
+## Discord Notifications Setup
+
+Get alerts in your Discord server:
+
+### Step 1: Create Webhook
+1. Go to your Discord server
+2. **Server Settings** → **Integrations** → **Webhooks**
+3. Click **New Webhook**
+4. Name it "BAGSX Alerts"
+5. Choose the channel for notifications
+6. Click **Copy Webhook URL**
+
+### Step 2: Connect to BAGSX
+Tell Claude:
+```
+"Setup Discord notifications with webhook https://discord.com/api/webhooks/..."
+```
+
+### Step 3: Test & Configure
+```
+"Send a test Discord notification"
+"Enable whale alerts on Discord"
+"Show my notification settings"
+```
+
 ---
 
 ## Examples
@@ -363,13 +461,14 @@ bagsx-mcp/
 ## Roadmap
 
 - [x] Core MCP server
-- [x] 25 trading/analytics tools
+- [x] 33 trading/analytics tools
 - [x] Read-only mode
 - [x] $BAGSX token launch
 - [x] Price alerts
-- [ ] Multi-wallet support
-- [ ] Autonomous trading mode
-- [ ] Telegram/Discord notifications
+- [x] Multi-wallet support
+- [x] Telegram/Discord notifications
+
+**All planned features complete!** 🎉
 
 ---
 

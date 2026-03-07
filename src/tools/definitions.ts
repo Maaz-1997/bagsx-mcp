@@ -626,6 +626,162 @@ export const TOOL_DEFINITIONS = {
       required: ['token', 'recipients'],
     },
   },
+
+  // ==================== MULTI-WALLET TOOLS ====================
+
+  bags_wallet_add: {
+    name: 'bags_wallet_add',
+    description: 'Add a wallet to your multi-wallet session. Assign an alias for easy reference.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        wallet: {
+          type: 'string',
+          description: 'Solana wallet address to add',
+        },
+        alias: {
+          type: 'string',
+          description: 'Friendly name for this wallet (e.g., "main", "trading", "cold")',
+        },
+      },
+      required: ['wallet'],
+    },
+  },
+
+  bags_wallet_remove: {
+    name: 'bags_wallet_remove',
+    description: 'Remove a wallet from your multi-wallet session.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        walletOrAlias: {
+          type: 'string',
+          description: 'Wallet address or alias to remove',
+        },
+      },
+      required: ['walletOrAlias'],
+    },
+  },
+
+  bags_wallet_list: {
+    name: 'bags_wallet_list',
+    description: 'List all wallets in your current session with their aliases and balances.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {},
+      required: [],
+    },
+  },
+
+  bags_wallet_set_default: {
+    name: 'bags_wallet_set_default',
+    description: 'Set the default wallet for trades when no wallet is specified.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        walletOrAlias: {
+          type: 'string',
+          description: 'Wallet address or alias to set as default',
+        },
+      },
+      required: ['walletOrAlias'],
+    },
+  },
+
+  bags_portfolio_all: {
+    name: 'bags_portfolio_all',
+    description: 'Get combined portfolio across all wallets in your session.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        groupBy: {
+          type: 'string',
+          enum: ['token', 'wallet'],
+          description: 'How to group the results',
+          default: 'token',
+        },
+      },
+      required: [],
+    },
+  },
+
+  // ==================== NOTIFICATION TOOLS ====================
+
+  bags_notify_telegram: {
+    name: 'bags_notify_telegram',
+    description: 'Configure Telegram notifications. First use /start with @BagsXBot to get your chat ID.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        action: {
+          type: 'string',
+          enum: ['setup', 'test', 'remove', 'status'],
+          description: 'Notification action',
+        },
+        chatId: {
+          type: 'string',
+          description: 'Your Telegram chat ID (get it from @BagsXBot)',
+        },
+      },
+      required: ['action'],
+    },
+  },
+
+  bags_notify_discord: {
+    name: 'bags_notify_discord',
+    description: 'Configure Discord notifications via webhook.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        action: {
+          type: 'string',
+          enum: ['setup', 'test', 'remove', 'status'],
+          description: 'Notification action',
+        },
+        webhookUrl: {
+          type: 'string',
+          description: 'Discord webhook URL from your server settings',
+        },
+      },
+      required: ['action'],
+    },
+  },
+
+  bags_notification_settings: {
+    name: 'bags_notification_settings',
+    description: 'Configure what notifications you receive.',
+    inputSchema: {
+      type: 'object' as const,
+      properties: {
+        action: {
+          type: 'string',
+          enum: ['get', 'update'],
+          description: 'Get current settings or update them',
+        },
+        priceAlerts: {
+          type: 'boolean',
+          description: 'Receive price alert notifications',
+        },
+        whaleAlerts: {
+          type: 'boolean',
+          description: 'Receive whale activity notifications',
+        },
+        tradeConfirmations: {
+          type: 'boolean',
+          description: 'Receive trade confirmation notifications',
+        },
+        newLaunches: {
+          type: 'boolean',
+          description: 'Receive new token launch notifications',
+        },
+        portfolioDaily: {
+          type: 'boolean',
+          description: 'Receive daily portfolio summary',
+        },
+      },
+      required: ['action'],
+    },
+  },
 };
 
 // Zod schemas for runtime validation
@@ -787,4 +943,46 @@ export const AirdropInputSchema = z.object({
     amount: z.number().positive(),
   })).min(1).max(100),
   senderWallet: z.string().min(32).max(44).optional(),
+});
+
+// ==================== MULTI-WALLET SCHEMAS ====================
+
+export const WalletAddInputSchema = z.object({
+  wallet: z.string().min(32).max(44),
+  alias: z.string().min(1).max(20).optional(),
+});
+
+export const WalletRemoveInputSchema = z.object({
+  walletOrAlias: z.string().min(1),
+});
+
+export const WalletListInputSchema = z.object({});
+
+export const WalletSetDefaultInputSchema = z.object({
+  walletOrAlias: z.string().min(1),
+});
+
+export const PortfolioAllInputSchema = z.object({
+  groupBy: z.enum(['token', 'wallet']).optional().default('token'),
+});
+
+// ==================== NOTIFICATION SCHEMAS ====================
+
+export const NotifyTelegramInputSchema = z.object({
+  action: z.enum(['setup', 'test', 'remove', 'status']),
+  chatId: z.string().optional(),
+});
+
+export const NotifyDiscordInputSchema = z.object({
+  action: z.enum(['setup', 'test', 'remove', 'status']),
+  webhookUrl: z.string().url().optional(),
+});
+
+export const NotificationSettingsInputSchema = z.object({
+  action: z.enum(['get', 'update']),
+  priceAlerts: z.boolean().optional(),
+  whaleAlerts: z.boolean().optional(),
+  tradeConfirmations: z.boolean().optional(),
+  newLaunches: z.boolean().optional(),
+  portfolioDaily: z.boolean().optional(),
 });

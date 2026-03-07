@@ -370,6 +370,102 @@ declare class BagsClient {
         recipientCount: number;
         estimatedFee: number;
     }>>;
+    private wallets;
+    private defaultWallet;
+    /**
+     * Add a wallet to the session
+     */
+    addWallet(wallet: string, alias?: string): Promise<BagsResponse<{
+        wallet: string;
+        alias: string | null;
+        balance: number;
+        tokenCount: number;
+    }>>;
+    /**
+     * Remove a wallet from the session
+     */
+    removeWallet(walletOrAlias: string): BagsResponse<{
+        removed: boolean;
+        wallet: string;
+    }>;
+    /**
+     * List all wallets in session
+     */
+    listWallets(): Promise<BagsResponse<Array<{
+        wallet: string;
+        alias: string | null;
+        isDefault: boolean;
+        balance: number;
+        tokenCount: number;
+    }>>>;
+    /**
+     * Set default wallet for trades
+     */
+    setDefaultWallet(walletOrAlias: string): BagsResponse<{
+        defaultWallet: string;
+    }>;
+    /**
+     * Get combined portfolio across all wallets
+     */
+    getPortfolioAll(groupBy?: 'token' | 'wallet'): Promise<BagsResponse<{
+        totalValue: number;
+        walletCount: number;
+        byWallet?: Array<{
+            wallet: string;
+            alias: string | null;
+            value: number;
+            holdings: unknown[];
+        }>;
+        byToken?: Array<{
+            token: string;
+            symbol: string;
+            totalBalance: number;
+            totalValue: number;
+            wallets: string[];
+        }>;
+    }>>;
+    /**
+     * Resolve wallet from alias or address
+     */
+    resolveWallet(walletOrAlias?: string): string | null;
+    /**
+     * Setup/manage Telegram notifications
+     */
+    manageTelegram(action: 'setup' | 'test' | 'remove' | 'status', chatId?: string): Promise<BagsResponse<{
+        status: string;
+        chatId?: string;
+        configured: boolean;
+        message: string;
+    }>>;
+    /**
+     * Setup/manage Discord notifications
+     */
+    manageDiscord(action: 'setup' | 'test' | 'remove' | 'status', webhookUrl?: string): Promise<BagsResponse<{
+        status: string;
+        configured: boolean;
+        webhookConfigured: boolean;
+        message: string;
+    }>>;
+    /**
+     * Get or update notification settings
+     */
+    manageNotificationSettings(params: {
+        action: 'get' | 'update';
+        priceAlerts?: boolean;
+        whaleAlerts?: boolean;
+        tradeConfirmations?: boolean;
+        newLaunches?: boolean;
+        portfolioDaily?: boolean;
+    }): Promise<BagsResponse<{
+        action: string;
+        settings: {
+            priceAlerts: boolean;
+            whaleAlerts: boolean;
+            tradeConfirmations: boolean;
+            newLaunches: boolean;
+            portfolioDaily: boolean;
+        };
+    }>>;
 }
 export declare const bagsClient: BagsClient;
 export type { TokenInfo, TrendingToken, Portfolio, TradeResult, BagsResponse };

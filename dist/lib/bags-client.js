@@ -284,6 +284,198 @@ class BagsClient {
             }),
         });
     }
+    // ==================== MULTI-WALLET MANAGEMENT ====================
+    // In-memory wallet store (persists during session)
+    wallets = new Map();
+    defaultWallet = null;
+    /**
+     * Add a wallet to the session
+     */
+    async addWallet(wallet, alias) {
+        // Validate wallet exists and get balance
+        const portfolioResult = await this.getPortfolio(wallet);
+        if (!portfolioResult.success) {
+            return { success: false, error: 'Invalid wallet address or unable to fetch balance' };
+        }
+        const key = alias || wallet;
+        this.wallets.set(key, { address: wallet, alias });
+        // Set as default if first wallet
+        if (this.wallets.size === 1) {
+            this.defaultWallet = key;
+        }
+        const portfolio = portfolioResult.response;
+        return {
+            success: true,
+            response: {
+                wallet,
+                alias: alias || null,
+                balance: portfolio.totalValueUsd,
+                tokenCount: portfolio.tokens.length,
+            },
+        };
+    }
+    /**
+     * Remove a wallet from the session
+     */
+    removeWallet(walletOrAlias) {
+        const entry = this.wallets.get(walletOrAlias);
+        if (!entry) {
+            // Try finding by address
+            for (const [key, val] of this.wallets.entries()) {
+                if (val.address === walletOrAlias) {
+                    this.wallets.delete(key);
+                    if (this.defaultWallet === key) {
+                        this.defaultWallet = this.wallets.keys().next().value || null;
+                    }
+                    return { success: true, response: { removed: true, wallet: val.address } };
+                }
+            }
+            return { success: false, error: 'Wallet not found in session' };
+        }
+        this.wallets.delete(walletOrAlias);
+        if (this.defaultWallet === walletOrAlias) {
+            this.defaultWallet = this.wallets.keys().next().value || null;
+        }
+        return { success: true, response: { removed: true, wallet: entry.address } };
+    }
+    /**
+     * List all wallets in session
+     */
+    async listWallets() {
+        const results = [];
+        for (const [key, val] of this.wallets.entries()) {
+            const portfolio = await this.getPortfolio(val.address);
+            const p = portfolio.response;
+            results.push({
+                wallet: val.address,
+                alias: val.alias || null,
+                isDefault: this.defaultWallet === key,
+                balance: p?.totalValueUsd || 0,
+                tokenCount: p?.tokens.length || 0,
+            });
+        }
+        return { success: true, response: results };
+    }
+    /**
+     * Set default wallet for trades
+     */
+    setDefaultWallet(walletOrAlias) {
+        const entry = this.wallets.get(walletOrAlias);
+        if (!entry) {
+            // Try finding by address
+            for (const [key, val] of this.wallets.entries()) {
+                if (val.address === walletOrAlias) {
+                    this.defaultWallet = key;
+                    return { success: true, response: { defaultWallet: val.address } };
+                }
+            }
+            return { success: false, error: 'Wallet not found in session' };
+        }
+        this.defaultWallet = walletOrAlias;
+        return { success: true, response: { defaultWallet: entry.address } };
+    }
+    /**
+     * Get combined portfolio across all wallets
+     */
+    async getPortfolioAll(groupBy = 'token') {
+        if (this.wallets.size === 0) {
+            return { success: false, error: 'No wallets in session. Use bags_wallet_add first.' };
+        }
+        let totalValue = 0;
+        const byWallet = [];
+        const tokenMap = new Map();
+        for (const [key, val] of this.wallets.entries()) {
+            const portfolio = await this.getPortfolio(val.address);
+            const p = portfolio.response;
+            if (p) {
+                totalValue += p.totalValueUsd;
+                byWallet.push({
+                    wallet: val.address,
+                    alias: val.alias || null,
+                    value: p.totalValueUsd,
+                    holdings: p.tokens,
+                });
+                for (const h of p.tokens) {
+                    const existing = tokenMap.get(h.mint);
+                    if (existing) {
+                        existing.balance += h.balance;
+                        existing.value += h.valueUsd;
+                        existing.wallets.push(val.alias || val.address.slice(0, 8));
+                    }
+                    else {
+                        tokenMap.set(h.mint, {
+                            symbol: h.symbol,
+                            balance: h.balance,
+                            value: h.valueUsd,
+                            wallets: [val.alias || val.address.slice(0, 8)],
+                        });
+                    }
+                }
+            }
+        }
+        const byToken = Array.from(tokenMap.entries()).map(([mint, data]) => ({
+            token: mint,
+            symbol: data.symbol,
+            totalBalance: data.balance,
+            totalValue: data.value,
+            wallets: data.wallets,
+        }));
+        return {
+            success: true,
+            response: {
+                totalValue,
+                walletCount: this.wallets.size,
+                ...(groupBy === 'wallet' ? { byWallet } : { byToken }),
+            },
+        };
+    }
+    /**
+     * Resolve wallet from alias or address
+     */
+    resolveWallet(walletOrAlias) {
+        if (!walletOrAlias) {
+            if (this.defaultWallet) {
+                const entry = this.wallets.get(this.defaultWallet);
+                return entry?.address || null;
+            }
+            return null;
+        }
+        const entry = this.wallets.get(walletOrAlias);
+        if (entry)
+            return entry.address;
+        // Check if it's a direct address
+        if (walletOrAlias.length >= 32)
+            return walletOrAlias;
+        return null;
+    }
+    // ==================== NOTIFICATION MANAGEMENT ====================
+    /**
+     * Setup/manage Telegram notifications
+     */
+    async manageTelegram(action, chatId) {
+        return this.request('/notifications/telegram', {
+            method: 'POST',
+            body: JSON.stringify({ action, chatId }),
+        });
+    }
+    /**
+     * Setup/manage Discord notifications
+     */
+    async manageDiscord(action, webhookUrl) {
+        return this.request('/notifications/discord', {
+            method: 'POST',
+            body: JSON.stringify({ action, webhookUrl }),
+        });
+    }
+    /**
+     * Get or update notification settings
+     */
+    async manageNotificationSettings(params) {
+        return this.request('/notifications/settings', {
+            method: 'POST',
+            body: JSON.stringify(params),
+        });
+    }
 }
 exports.bagsClient = new BagsClient();
 //# sourceMappingURL=bags-client.js.map

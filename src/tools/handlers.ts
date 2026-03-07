@@ -29,6 +29,16 @@ import {
   TopCreatorsInputSchema,
   LaunchTokenInputSchema,
   AirdropInputSchema,
+  // Multi-Wallet
+  WalletAddInputSchema,
+  WalletRemoveInputSchema,
+  WalletListInputSchema,
+  WalletSetDefaultInputSchema,
+  PortfolioAllInputSchema,
+  // Notifications
+  NotifyTelegramInputSchema,
+  NotifyDiscordInputSchema,
+  NotificationSettingsInputSchema,
 } from './definitions';
 
 type ToolResult = {
@@ -579,6 +589,188 @@ export async function handleToolCall(
             '',
             '⏱️ Transaction expires in ~2 minutes',
           ].join('\\n'),
+        });
+      }
+
+      // ==================== MULTI-WALLET TOOLS ====================
+
+      case 'bags_wallet_add': {
+        const input = WalletAddInputSchema.parse(args);
+        const result = await bagsClient.addWallet(input.wallet, input.alias);
+
+        if (!result.success) {
+          return formatError(result.error || 'Failed to add wallet');
+        }
+
+        return formatSuccess({
+          status: 'wallet_added',
+          wallet: result.response,
+          message: input.alias 
+            ? `Wallet added as "${input.alias}"` 
+            : 'Wallet added to session',
+        });
+      }
+
+      case 'bags_wallet_remove': {
+        const input = WalletRemoveInputSchema.parse(args);
+        const result = bagsClient.removeWallet(input.walletOrAlias);
+
+        if (!result.success) {
+          return formatError(result.error || 'Failed to remove wallet');
+        }
+
+        return formatSuccess({
+          status: 'wallet_removed',
+          result: result.response,
+        });
+      }
+
+      case 'bags_wallet_list': {
+        WalletListInputSchema.parse(args);
+        const result = await bagsClient.listWallets();
+
+        if (!result.success) {
+          return formatError(result.error || 'Failed to list wallets');
+        }
+
+        const wallets = result.response || [];
+        if (wallets.length === 0) {
+          return formatSuccess({
+            message: 'No wallets in session. Use bags_wallet_add to add a wallet.',
+            wallets: [],
+          });
+        }
+
+        return formatSuccess({
+          walletCount: wallets.length,
+          wallets: wallets,
+          tip: 'Use bags_wallet_set_default to change the default wallet for trades.',
+        });
+      }
+
+      case 'bags_wallet_set_default': {
+        const input = WalletSetDefaultInputSchema.parse(args);
+        const result = bagsClient.setDefaultWallet(input.walletOrAlias);
+
+        if (!result.success) {
+          return formatError(result.error || 'Failed to set default wallet');
+        }
+
+        return formatSuccess({
+          status: 'default_wallet_set',
+          defaultWallet: result.response?.defaultWallet,
+          message: `Default wallet set to ${result.response?.defaultWallet}`,
+        });
+      }
+
+      case 'bags_portfolio_all': {
+        const input = PortfolioAllInputSchema.parse(args);
+        const result = await bagsClient.getPortfolioAll(input.groupBy);
+
+        if (!result.success) {
+          return formatError(result.error || 'Failed to fetch combined portfolio');
+        }
+
+        return formatSuccess({
+          summary: {
+            totalValue: result.response?.totalValue,
+            walletCount: result.response?.walletCount,
+          },
+          groupedBy: input.groupBy,
+          data: input.groupBy === 'wallet' 
+            ? result.response?.byWallet 
+            : result.response?.byToken,
+        });
+      }
+
+      // ==================== NOTIFICATION TOOLS ====================
+
+      case 'bags_notify_telegram': {
+        const input = NotifyTelegramInputSchema.parse(args);
+        
+        if (input.action === 'setup' && !input.chatId) {
+          return formatSuccess({
+            status: 'setup_required',
+            instructions: [
+              '📱 TELEGRAM SETUP',
+              '',
+              '1. Open Telegram and search for @BagsXBot',
+              '2. Start the bot with /start',
+              '3. The bot will reply with your Chat ID',
+              '4. Run this tool again with your chatId:',
+              '   bags_notify_telegram action=setup chatId=YOUR_CHAT_ID',
+              '',
+              'Example: bags_notify_telegram action=setup chatId=123456789',
+            ].join('\\n'),
+          });
+        }
+
+        const result = await bagsClient.manageTelegram(input.action, input.chatId);
+
+        if (!result.success) {
+          return formatError(result.error || 'Telegram operation failed');
+        }
+
+        return formatSuccess({
+          action: input.action,
+          result: result.response,
+        });
+      }
+
+      case 'bags_notify_discord': {
+        const input = NotifyDiscordInputSchema.parse(args);
+        
+        if (input.action === 'setup' && !input.webhookUrl) {
+          return formatSuccess({
+            status: 'setup_required',
+            instructions: [
+              '🎮 DISCORD SETUP',
+              '',
+              '1. Go to your Discord server settings',
+              '2. Click Integrations → Webhooks → New Webhook',
+              '3. Name it "BAGSX Alerts" and choose a channel',
+              '4. Copy the Webhook URL',
+              '5. Run this tool again with your webhookUrl:',
+              '',
+              'Example:',
+              'bags_notify_discord action=setup webhookUrl=https://discord.com/api/webhooks/...',
+            ].join('\\n'),
+          });
+        }
+
+        const result = await bagsClient.manageDiscord(input.action, input.webhookUrl);
+
+        if (!result.success) {
+          return formatError(result.error || 'Discord operation failed');
+        }
+
+        return formatSuccess({
+          action: input.action,
+          result: result.response,
+        });
+      }
+
+      case 'bags_notification_settings': {
+        const input = NotificationSettingsInputSchema.parse(args);
+        const result = await bagsClient.manageNotificationSettings({
+          action: input.action,
+          priceAlerts: input.priceAlerts,
+          whaleAlerts: input.whaleAlerts,
+          tradeConfirmations: input.tradeConfirmations,
+          newLaunches: input.newLaunches,
+          portfolioDaily: input.portfolioDaily,
+        });
+
+        if (!result.success) {
+          return formatError(result.error || 'Failed to manage notification settings');
+        }
+
+        return formatSuccess({
+          action: input.action,
+          settings: result.response?.settings,
+          message: input.action === 'update' 
+            ? 'Notification settings updated' 
+            : 'Current notification settings',
         });
       }
 
