@@ -741,18 +741,18 @@ export declare const TrendingInputSchema: z.ZodObject<{
     metric: z.ZodDefault<z.ZodOptional<z.ZodEnum<["volume", "marketCap", "gainers", "losers"]>>>;
     limit: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
 }, "strip", z.ZodTypeAny, {
-    metric: "volume" | "marketCap" | "gainers" | "losers";
     limit: number;
+    metric: "volume" | "marketCap" | "gainers" | "losers";
 }, {
-    metric?: "volume" | "marketCap" | "gainers" | "losers" | undefined;
     limit?: number | undefined;
+    metric?: "volume" | "marketCap" | "gainers" | "losers" | undefined;
 }>;
 export declare const SearchInputSchema: z.ZodObject<{
     query: z.ZodString;
     limit: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
 }, "strip", z.ZodTypeAny, {
-    query: string;
     limit: number;
+    query: string;
 }, {
     query: string;
     limit?: number | undefined;
@@ -775,8 +775,8 @@ export declare const TradesInputSchema: z.ZodObject<{
     token: z.ZodString;
     limit: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
 }, "strip", z.ZodTypeAny, {
-    token: string;
     limit: number;
+    token: string;
 }, {
     token: string;
     limit?: number | undefined;
@@ -797,14 +797,14 @@ export declare const QuoteInputSchema: z.ZodObject<{
     amount: z.ZodNumber;
     slippage: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
 }, "strip", z.ZodTypeAny, {
+    amount: number;
     from: string;
     to: string;
-    amount: number;
     slippage: number;
 }, {
+    amount: number;
     from: string;
     to: string;
-    amount: number;
     slippage?: number | undefined;
 }>;
 export declare const BuyInputSchema: z.ZodObject<{
@@ -832,13 +832,13 @@ export declare const SellInputSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     token: string;
     slippage: number;
-    wallet?: string | undefined;
     amount?: number | undefined;
+    wallet?: string | undefined;
     percentage?: number | undefined;
 }, {
     token: string;
-    wallet?: string | undefined;
     amount?: number | undefined;
+    wallet?: string | undefined;
     slippage?: number | undefined;
     percentage?: number | undefined;
 }>;
@@ -874,12 +874,12 @@ export declare const GainersLosersInputSchema: z.ZodObject<{
     period: z.ZodDefault<z.ZodOptional<z.ZodEnum<["1h", "24h", "7d"]>>>;
     limit: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
 }, "strip", z.ZodTypeAny, {
-    limit: number;
     type: "gainers" | "losers" | "both";
+    limit: number;
     period: "1h" | "24h" | "7d";
 }, {
-    limit?: number | undefined;
     type?: "gainers" | "losers" | "both" | undefined;
+    limit?: number | undefined;
     period?: "1h" | "24h" | "7d" | undefined;
 }>;
 export declare const HolderAnalysisInputSchema: z.ZodObject<{
@@ -916,15 +916,15 @@ export declare const LimitOrderInputSchema: z.ZodObject<{
     expiry: z.ZodDefault<z.ZodOptional<z.ZodEnum<["1h", "24h", "7d", "30d"]>>>;
     wallet: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    token: string;
     amount: number;
+    token: string;
     side: "buy" | "sell";
     price: number;
     expiry: "1h" | "24h" | "7d" | "30d";
     wallet?: string | undefined;
 }, {
-    token: string;
     amount: number;
+    token: string;
     side: "buy" | "sell";
     price: number;
     wallet?: string | undefined;
@@ -936,12 +936,12 @@ export declare const GasEstimateInputSchema: z.ZodObject<{
     amount: z.ZodOptional<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
     action: "buy" | "sell" | "swap" | "launch";
-    token?: string | undefined;
     amount?: number | undefined;
+    token?: string | undefined;
 }, {
     action: "buy" | "sell" | "swap" | "launch";
-    token?: string | undefined;
     amount?: number | undefined;
+    token?: string | undefined;
 }>;
 export declare const SlippageCheckInputSchema: z.ZodObject<{
     token: z.ZodString;
@@ -961,13 +961,13 @@ export declare const WatchlistInputSchema: z.ZodObject<{
     token: z.ZodOptional<z.ZodString>;
     wallet: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    action: "add" | "remove" | "list";
-    token?: string | undefined;
+    action: "list" | "add" | "remove";
     wallet?: string | undefined;
+    token?: string | undefined;
 }, {
-    action: "add" | "remove" | "list";
-    token?: string | undefined;
+    action: "list" | "add" | "remove";
     wallet?: string | undefined;
+    token?: string | undefined;
 }>;
 export declare const PriceAlertInputSchema: z.ZodObject<{
     action: z.ZodEnum<["set", "remove", "list"]>;
@@ -976,15 +976,15 @@ export declare const PriceAlertInputSchema: z.ZodObject<{
     direction: z.ZodOptional<z.ZodEnum<["above", "below"]>>;
     wallet: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    action: "remove" | "list" | "set";
-    token?: string | undefined;
+    action: "set" | "list" | "remove";
     wallet?: string | undefined;
+    token?: string | undefined;
     targetPrice?: number | undefined;
     direction?: "above" | "below" | undefined;
 }, {
-    action: "remove" | "list" | "set";
-    token?: string | undefined;
+    action: "set" | "list" | "remove";
     wallet?: string | undefined;
+    token?: string | undefined;
     targetPrice?: number | undefined;
     direction?: "above" | "below" | undefined;
 }>;
@@ -993,10 +993,10 @@ export declare const PnlReportInputSchema: z.ZodObject<{
     period: z.ZodDefault<z.ZodOptional<z.ZodEnum<["24h", "7d", "30d", "all"]>>>;
 }, "strip", z.ZodTypeAny, {
     wallet: string;
-    period: "24h" | "7d" | "30d" | "all";
+    period: "all" | "24h" | "7d" | "30d";
 }, {
     wallet: string;
-    period?: "24h" | "7d" | "30d" | "all" | undefined;
+    period?: "all" | "24h" | "7d" | "30d" | undefined;
 }>;
 export declare const CompareInputSchema: z.ZodObject<{
     tokens: z.ZodArray<z.ZodString, "many">;
@@ -1009,11 +1009,11 @@ export declare const TopCreatorsInputSchema: z.ZodObject<{
     metric: z.ZodDefault<z.ZodOptional<z.ZodEnum<["earnings", "volume", "holders"]>>>;
     limit: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
 }, "strip", z.ZodTypeAny, {
-    metric: "volume" | "earnings" | "holders";
     limit: number;
+    metric: "volume" | "earnings" | "holders";
 }, {
-    metric?: "volume" | "earnings" | "holders" | undefined;
     limit?: number | undefined;
+    metric?: "volume" | "earnings" | "holders" | undefined;
 }>;
 export declare const LaunchTokenInputSchema: z.ZodObject<{
     name: z.ZodString;
@@ -1030,20 +1030,20 @@ export declare const LaunchTokenInputSchema: z.ZodObject<{
     name: string;
     description: string;
     wallet?: string | undefined;
-    image?: string | undefined;
     twitter?: string | undefined;
     telegram?: string | undefined;
     website?: string | undefined;
+    image?: string | undefined;
     initialBuySol?: number | undefined;
 }, {
     symbol: string;
     name: string;
     description: string;
     wallet?: string | undefined;
-    image?: string | undefined;
     twitter?: string | undefined;
     telegram?: string | undefined;
     website?: string | undefined;
+    image?: string | undefined;
     initialBuySol?: number | undefined;
 }>;
 export declare const AirdropInputSchema: z.ZodObject<{
@@ -1052,25 +1052,25 @@ export declare const AirdropInputSchema: z.ZodObject<{
         wallet: z.ZodString;
         amount: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        wallet: string;
         amount: number;
+        wallet: string;
     }, {
-        wallet: string;
         amount: number;
+        wallet: string;
     }>, "many">;
     senderWallet: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     token: string;
     recipients: {
-        wallet: string;
         amount: number;
+        wallet: string;
     }[];
     senderWallet?: string | undefined;
 }, {
     token: string;
     recipients: {
-        wallet: string;
         amount: number;
+        wallet: string;
     }[];
     senderWallet?: string | undefined;
 }>;
@@ -1102,28 +1102,28 @@ export declare const WalletSetDefaultInputSchema: z.ZodObject<{
 export declare const PortfolioAllInputSchema: z.ZodObject<{
     groupBy: z.ZodDefault<z.ZodOptional<z.ZodEnum<["token", "wallet"]>>>;
 }, "strip", z.ZodTypeAny, {
-    groupBy: "token" | "wallet";
+    groupBy: "wallet" | "token";
 }, {
-    groupBy?: "token" | "wallet" | undefined;
+    groupBy?: "wallet" | "token" | undefined;
 }>;
 export declare const NotifyTelegramInputSchema: z.ZodObject<{
     action: z.ZodEnum<["setup", "test", "remove", "status"]>;
     chatId: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    action: "remove" | "setup" | "test" | "status";
+    action: "status" | "remove" | "setup" | "test";
     chatId?: string | undefined;
 }, {
-    action: "remove" | "setup" | "test" | "status";
+    action: "status" | "remove" | "setup" | "test";
     chatId?: string | undefined;
 }>;
 export declare const NotifyDiscordInputSchema: z.ZodObject<{
     action: z.ZodEnum<["setup", "test", "remove", "status"]>;
     webhookUrl: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    action: "remove" | "setup" | "test" | "status";
+    action: "status" | "remove" | "setup" | "test";
     webhookUrl?: string | undefined;
 }, {
-    action: "remove" | "setup" | "test" | "status";
+    action: "status" | "remove" | "setup" | "test";
     webhookUrl?: string | undefined;
 }>;
 export declare const NotificationSettingsInputSchema: z.ZodObject<{

@@ -662,14 +662,14 @@ class BagsClient {
   }>> {
     // Validate wallet exists and get balance
     const portfolioResult = await this.getPortfolio(wallet);
-    
+
     if (!portfolioResult.success) {
       return { success: false, error: 'Invalid wallet address or unable to fetch balance' };
     }
 
     const key = alias || wallet;
     this.wallets.set(key, { address: wallet, alias });
-    
+
     // Set as default if first wallet
     if (this.wallets.size === 1) {
       this.defaultWallet = key;
@@ -724,7 +724,7 @@ class BagsClient {
     tokenCount: number;
   }>>> {
     const results = [];
-    
+
     for (const [key, val] of this.wallets.entries()) {
       const portfolio = await this.getPortfolio(val.address);
       const p = portfolio.response as Portfolio | undefined;

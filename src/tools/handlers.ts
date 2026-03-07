@@ -605,8 +605,8 @@ export async function handleToolCall(
         return formatSuccess({
           status: 'wallet_added',
           wallet: result.response,
-          message: input.alias 
-            ? `Wallet added as "${input.alias}"` 
+          message: input.alias
+            ? `Wallet added as "${input.alias}"`
             : 'Wallet added to session',
         });
       }
@@ -677,8 +677,8 @@ export async function handleToolCall(
             walletCount: result.response?.walletCount,
           },
           groupedBy: input.groupBy,
-          data: input.groupBy === 'wallet' 
-            ? result.response?.byWallet 
+          data: input.groupBy === 'wallet'
+            ? result.response?.byWallet
             : result.response?.byToken,
         });
       }
@@ -687,7 +687,7 @@ export async function handleToolCall(
 
       case 'bags_notify_telegram': {
         const input = NotifyTelegramInputSchema.parse(args);
-        
+
         if (input.action === 'setup' && !input.chatId) {
           return formatSuccess({
             status: 'setup_required',
@@ -719,7 +719,7 @@ export async function handleToolCall(
 
       case 'bags_notify_discord': {
         const input = NotifyDiscordInputSchema.parse(args);
-        
+
         if (input.action === 'setup' && !input.webhookUrl) {
           return formatSuccess({
             status: 'setup_required',
@@ -768,8 +768,8 @@ export async function handleToolCall(
         return formatSuccess({
           action: input.action,
           settings: result.response?.settings,
-          message: input.action === 'update' 
-            ? 'Notification settings updated' 
+          message: input.action === 'update'
+            ? 'Notification settings updated'
             : 'Current notification settings',
         });
       }

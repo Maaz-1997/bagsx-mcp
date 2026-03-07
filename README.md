@@ -1,17 +1,16 @@
-# BAGSX MCP Server
+# BAGSX MCP Server v2.0
 
 <div align="center">
 
 ![BAGSX Logo](https://img.shields.io/badge/BAGSX-MCP%20Server-00d4ff?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTV6Ii8+PC9zdmc+)
 
-**Trade crypto with Claude using natural language**
+**Trade, launch, and manage creator tokens with Claude**
 
-[![npm version](https://img.shields.io/npm/v/@bagsx/mcp-server?style=flat-square)](https://www.npmjs.com/package/@bagsx/mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Bags Hackathon](https://img.shields.io/badge/Bags-Hackathon%202026-ff6b6b?style=flat-square)](https://bags.fm/hackathon)
 [![$BAGSX Token](https://img.shields.io/badge/%24BAGSX-Live%20on%20Bags-00ff88?style=flat-square)](https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS)
 
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Tools](#tools) • [$BAGSX Token](#bagsx-token)
+[Features](#features) • [Installation](#installation) • [Tools](#tools) • [$BAGSX Token](#bagsx-token)
 
 </div>
 
@@ -32,16 +31,16 @@ Every trade on $BAGSX generates creator fees that support ongoing development.
 
 ## What is BAGSX?
 
-BAGSX is a **Model Context Protocol (MCP) server** that connects [Claude](https://claude.ai) to [Bags.fm](https://bags.fm) — the creator token launchpad on Solana.
+BAGSX is a **Model Context Protocol (MCP) server** that connects [Claude](https://claude.ai) to the [Bags.fm API](https://docs.bags.fm) — enabling AI-powered trading, token launches, and fee management on Solana.
 
 Talk to Claude in plain English to:
-- 📈 **Discover trending tokens** and analyze projects
-- 💰 **Execute trades** with natural language commands
-- 👀 **Track whales** and large transactions
-- 📊 **Manage portfolios** with AI-powered insights
-- 🚀 **Launch tokens** with fee sharing built-in
+- 💰 **Get swap quotes** and execute trades with slippage protection
+- 🚀 **Launch tokens** with automatic metadata and bonding curves
+- 💸 **Claim creator fees** from your launched tokens
+- 📊 **View analytics** on creators, fees, and claim events
+- ⚙️ **Configure fee sharing** with multiple wallets
 
-> **First MCP server for Bags.fm** — Built for the $4M Bags Hackathon
+> **Built for the $4M Bags Hackathon** — 18 real API tools
 
 ---
 
@@ -49,11 +48,11 @@ Talk to Claude in plain English to:
 
 | Feature | Description |
 |---------|-------------|
-| **33 Tools** | Full trading suite: market data, trading, portfolio, alerts, notifications |
-| **Multi-Wallet** | Manage multiple wallets in one session |
-| **Notifications** | Telegram & Discord real-time alerts |
-| **Solana Native** | Direct integration with Bags.fm on Solana |
-| **Zero Custody** | NO private keys needed - you sign in your own wallet |
+| **18 Real Tools** | Every tool maps to an actual Bags API endpoint |
+| **Trading** | Get quotes, execute swaps with auto-slippage |
+| **Token Launch** | Prepare metadata + create bonding curve tokens |
+| **Fee Management** | Claim fees, configure splits, transfer admin |
+| **Zero Custody** | All transactions are UNSIGNED — you sign in your wallet |
 
 ---
 
@@ -61,7 +60,7 @@ Talk to Claude in plain English to:
 
 **BAGSX uses unsigned transactions** — your private keys NEVER leave your wallet:
 
-1. You ask Claude to buy/sell
+1. You ask Claude to trade/claim/etc
 2. BAGSX generates an unsigned transaction
 3. You copy the transaction to your wallet (Phantom/Solflare)
 4. You sign and submit yourself
@@ -168,221 +167,123 @@ Once connected, just talk to Claude:
 
 ## Tools
 
-### 📊 Market Intelligence (8 Tools)
+### � Trading (2 Tools)
 
 | Tool | Description |
 |------|-------------|
-| `bags_trending` | Get trending tokens by volume, market cap, gainers, or losers |
-| `bags_search` | Search tokens by name or symbol |
-| `bags_token_info` | Get detailed token information |
-| `bags_price_history` | Historical price data (1h, 24h, 7d, 30d) |
-| `bags_new_launches` | Find newly launched tokens (last 72h) |
-| `bags_gainers_losers` | Top gainers and losers in real-time |
-| `bags_holder_analysis` | Holder distribution and whale percentage |
-| `bags_compare` | Side-by-side comparison of multiple tokens |
+| `bags_quote` | Get swap quotes with price impact & slippage. Supports auto or manual slippage. |
+| `bags_swap` | Create unsigned swap transaction from a quote. You sign in your wallet. |
 
-### 💰 Trading Tools (7 Tools - Zero Custody)
+### 🚀 Token Launch (2 Tools)
 
 | Tool | Description |
 |------|-------------|
-| `bags_quote` | Get price quotes without executing |
-| `bags_buy` | Prepare buy transaction (you sign in wallet) |
-| `bags_sell` | Prepare sell transaction (you sign in wallet) |
-| `bags_swap` | Token-to-token swaps |
-| `bags_limit_order` | Set limit buy/sell orders |
-| `bags_gas_estimate` | Preview transaction fees before trading |
-| `bags_slippage_check` | Calculate price impact for large orders |
+| `bags_launch_prepare` | Create token metadata (name, symbol, image, socials). Returns mint address. |
+| `bags_launch_execute` | Create bonding curve launch transaction. You sign to deploy. |
 
-### 👀 Portfolio & Tracking (6 Tools)
+### 📊 Analytics (4 Tools)
 
 | Tool | Description |
 |------|-------------|
-| `bags_portfolio` | View wallet holdings and performance |
-| `bags_trades` | Get recent trades for a token |
-| `bags_whales` | Track large transactions |
-| `bags_watchlist` | Add/remove tokens from your watchlist |
-| `bags_price_alert` | Set price alerts for tokens |
-| `bags_pnl_report` | Generate profit/loss report for a wallet |
+| `bags_creators` | Get creator info and royalty settings for a token. |
+| `bags_lifetime_fees` | Total fees generated by a token since launch. |
+| `bags_claim_stats` | Who claimed fees and how much (per wallet breakdown). |
+| `bags_claim_events` | Historical claim events with timestamps & signatures. |
 
-### 🚀 Creator Tools (4 Tools)
+### 💸 Fee Claiming (2 Tools)
 
 | Tool | Description |
 |------|-------------|
-| `bags_creator_earnings` | View creator royalty earnings |
-| `bags_top_creators` | Leaderboard of top-earning creators |
-| `bags_launch_token` | Launch a new token on Bags.fm |
-| `bags_airdrop` | Airdrop tokens to multiple wallets |
+| `bags_claimable` | Check claimable positions for a wallet (all tokens). |
+| `bags_claim_fees` | Generate unsigned transactions to claim fees. You sign. |
 
-### 👛 Multi-Wallet Tools (5 Tools)
+### ⚙️ Fee Share Config (5 Tools)
 
 | Tool | Description |
 |------|-------------|
-| `bags_wallet_add` | Add a wallet to your session with optional alias |
-| `bags_wallet_remove` | Remove a wallet from your session |
-| `bags_wallet_list` | List all wallets with balances |
-| `bags_wallet_set_default` | Set default wallet for trades |
-| `bags_portfolio_all` | Combined portfolio across all wallets |
+| `bags_fee_wallet` | Look up fee share wallet for a social username (Twitter, etc). |
+| `bags_fee_config` | Create fee share configuration with multiple claimers & splits. |
+| `bags_admin_list` | List tokens where a wallet has admin rights. |
+| `bags_admin_update` | Update fee share splits (admin only). |
+| `bags_admin_transfer` | Transfer admin rights to another wallet. |
 
-### 🔔 Notification Tools (3 Tools)
+### 🏊 State/Pools (2 Tools)
 
 | Tool | Description |
 |------|-------------|
-| `bags_notify_telegram` | Setup Telegram notifications |
-| `bags_notify_discord` | Setup Discord webhook notifications |
-| `bags_notification_settings` | Configure what alerts you receive |
+| `bags_pools` | List all Bags pools (optionally filter to migrated only). |
+| `bags_pool_info` | Get pool details by token mint address. |
+
+### 🤝 Partner (2 Tools)
+
+| Tool | Description |
+|------|-------------|
+| `bags_partner_stats` | View claimed and unclaimed partner fees. |
+| `bags_partner_claim` | Generate unsigned transactions to claim partner fees. |
 
 ---
 
-## Multi-Wallet Setup
+## Usage Examples
 
-Manage multiple wallets in a single session:
-
+### Getting a Swap Quote
 ```
-"Add my trading wallet 7xK2...abc as 'trading'"
-"Add my cold wallet 9mN4...xyz as 'hodl'"
-"List my wallets"
-"Show combined portfolio across all wallets"
-"Set trading as my default wallet"
-"Buy $100 NYAN from my hodl wallet"
-```
+You: "Get a quote for swapping 0.5 SOL to the BAGSX token"
 
-**How it works:**
-1. Add wallets with aliases for easy reference
-2. Set a default wallet for trades
-3. View combined portfolio across all wallets
-4. Specify which wallet to use per trade
+Claude: [Uses bags_quote tool]
 
----
+Quote details:
+- Input: 0.5 SOL (500000000 lamports)
+- Output: ~1,234.56 BAGSX
+- Price Impact: 0.12%
+- Slippage: 50 bps (auto)
+- Request ID: abc123...
 
-## Telegram Notifications Setup
-
-Get real-time alerts on Telegram:
-
-### Step 1: Start the Bot
-1. Open Telegram
-2. Search for `@BagsXBot`
-3. Tap **Start** or send `/start`
-4. The bot replies with your **Chat ID** (a number like `123456789`)
-
-### Step 2: Connect to BAGSX
-Tell Claude:
-```
-"Setup Telegram notifications with chat ID 123456789"
+Use bags_swap with this request ID to execute the trade.
 ```
 
-### Step 3: Configure Alerts
+### Executing a Swap
 ```
-"Enable price alerts and whale notifications on Telegram"
-"Disable daily portfolio summary"
-"Send me a test notification"
-```
+You: "Execute that swap with my wallet 7xK2..."
 
-### What You'll Receive
-- 🔔 Price alerts when targets are hit
-- 🐋 Whale activity on your watched tokens
-- ✅ Trade confirmations
-- 🚀 New token launches
-- 📊 Daily portfolio summaries
+Claude: [Uses bags_swap tool]
 
----
+Unsigned transaction ready:
+- Transaction: AQAAAA...
+- Block Height: 234567890
+- Priority Fee: 5000 lamports
 
-## Discord Notifications Setup
-
-Get alerts in your Discord server:
-
-### Step 1: Create Webhook
-1. Go to your Discord server
-2. **Server Settings** → **Integrations** → **Webhooks**
-3. Click **New Webhook**
-4. Name it "BAGSX Alerts"
-5. Choose the channel for notifications
-6. Click **Copy Webhook URL**
-
-### Step 2: Connect to BAGSX
-Tell Claude:
-```
-"Setup Discord notifications with webhook https://discord.com/api/webhooks/..."
+To complete: Copy to Phantom → Sign → Submit
 ```
 
-### Step 3: Test & Configure
+### Launching a Token
 ```
-"Send a test Discord notification"
-"Enable whale alerts on Discord"
-"Show my notification settings"
-```
+You: "Launch a token called DEMO with symbol DMO"
 
----
+Claude: [Uses bags_launch_prepare tool]
 
-## Examples
+Token info created:
+- Mint: 9xYz123...
+- Metadata URI: ipfs://...
+- Status: Ready
 
-### Example 1: Finding Alpha
-
-```
-You: "What are the top 5 trending tokens by volume? Give me a quick analysis of each."
-
-Claude: [Uses bags_trending tool]
-
-Here are the top 5 trending tokens on Bags.fm by 24h volume:
-
-1. **$NYAN** - Market Cap: $2.1M, Volume: $892K
-   - Creator: @PRguitarman (Nyan Cat creator)
-   - Strong holder base, consistent volume
-
-2. **$BTH** - Market Cap: $1.8M, Volume: $654K
-   - New project, high momentum
-   - Price up 45% in 24h
-
-...
+Use bags_launch_execute to deploy the bonding curve.
 ```
 
-### Example 2: Executing a Trade (Secure - You Sign)
-
+### Claiming Creator Fees
 ```
-You: "Buy $100 of $NYAN"
+You: "What fees can I claim for wallet 7xK2...?"
 
-Claude: [Uses bags_buy tool]
+Claude: [Uses bags_claimable tool]
 
-🔐 SECURE TRADE - Your keys never leave your wallet
+Claimable positions:
+| Token | Amount |
+|-------|--------|
+| BAGSX | 0.42 SOL |
+| DEMO  | 0.15 SOL |
 
-Trade prepared:
-- Buying: $NYAN
-- Amount: $100 USD
-- Expected tokens: ~46.3 NYAN
-- Price impact: 0.12%
+Total: 0.57 SOL
 
-**Unsigned Transaction:**
-AQAAAAAAAAAAAAAAAAAAAAm...
-
-**To complete:**
-1. Copy transaction above
-2. Go to bags.fm/sign (or Phantom > Developer Settings)
-3. Paste and sign
-4. Submit to Solana
-
-⏱️ Expires in ~2 minutes
-```
-
-### Example 3: Portfolio Analysis
-
-```
-You: "Analyze my portfolio performance this week"
-
-Claude: [Uses bags_portfolio]
-
-📊 Portfolio Summary for wallet 7xK2...
-
-Total Value: $4,892.50 (+12.3% this week)
-
-Holdings:
-| Token | Value | Change |
-|-------|-------|--------|
-| $NYAN | $2,156 | +18.2% |
-| $GAS | $1,483 | +8.7% |
-| $BTH | $892 | +4.1% |
-| $RALPH | $361 | -2.3% |
-
-Top performer: $NYAN (+18.2%)
-Suggestion: Consider taking partial profits on $NYAN
+Shall I generate claim transactions?
 ```
 
 ---
@@ -394,16 +295,13 @@ Suggestion: Consider taking partial profits on $NYAN
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `BAGS_API_KEY` | Yes | Your Bags API key from dev.bags.fm |
-| `SOLANA_RPC_URL` | No | Custom RPC endpoint (default: mainnet) |
-| `SOLANA_PRIVATE_KEY` | No | Base58 private key for trading |
 
-### Read-Only Mode
+### Get Your API Key
 
-Without `SOLANA_PRIVATE_KEY`, the server runs in read-only mode:
-- ✅ View trending, search, portfolio, trades, whales
-- ❌ Cannot execute buy/sell orders
-
-This is safer for exploration and analysis.
+1. Go to [dev.bags.fm](https://dev.bags.fm)
+2. Sign up / log in
+3. Create a new API key
+4. Add to your `.env` file
 
 ---
 
@@ -412,8 +310,8 @@ This is safer for exploration and analysis.
 This project is submitted to the **Bags Hackathon 2026** under:
 
 - ✅ **Claude Skills** — MCP server for Claude integration
-- ✅ **Bags API** — Deep integration with Bags.fm API
-- ✅ **AI Agents** — Enables AI-powered trading
+- ✅ **Bags API** — Full integration with public Bags.fm API
+- ✅ **AI Agents** — Enables AI-powered trading via natural language
 
 ---
 
@@ -435,13 +333,13 @@ npm start
 ```
 bagsx-mcp/
 ├── src/
-│   ├── index.ts           # MCP server entry point
-│   ├── config.ts          # Configuration management
+│   ├── index.ts              # MCP server entry point
+│   ├── config.ts             # Configuration management
 │   ├── lib/
-│   │   └── bags-client.ts # Bags API client
+│   │   └── bags-client-new.ts # Bags API client (18 methods)
 │   └── tools/
-│       ├── definitions.ts # Tool schemas
-│       └── handlers.ts    # Tool implementations
+│       ├── definitions-new.ts # Tool schemas (18 tools)
+│       └── handlers-new.ts    # Tool implementations
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -451,24 +349,21 @@ bagsx-mcp/
 
 ## Security
 
-- 🔒 **Private keys never leave your machine** — All signing happens locally
-- 🔒 **API keys in environment** — Not hardcoded or transmitted
-- 🔒 **Trade confirmations** — Claude asks before executing trades
+- 🔒 **Private keys never needed** — All transactions are unsigned
+- 🔒 **API key in environment** — Not hardcoded or exposed to Claude
+- 🔒 **You sign everything** — Full control over what gets submitted
 - 🔒 **Open source** — Audit the code yourself
 
 ---
 
 ## Roadmap
 
-- [x] Core MCP server
-- [x] 33 trading/analytics tools
-- [x] Read-only mode
+- [x] Core MCP server with real API integration
+- [x] 18 working tools (trading, launch, fees, analytics)
+- [x] Zero custody security model
 - [x] $BAGSX token launch
-- [x] Price alerts
-- [x] Multi-wallet support
-- [x] Telegram/Discord notifications
-
-**All planned features complete!** 🎉
+- [ ] Additional analytics as Bags API expands
+- [ ] Real-time price feeds (when available)
 
 ---
 
