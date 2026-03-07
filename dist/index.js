@@ -97,7 +97,7 @@ server.setRequestHandler(types_js_1.ReadResourceRequestSchema, async (request) =
 async function main() {
     console.error('[BAGSX] Starting MCP Server...');
     console.error(`[BAGSX] API Key: ${config_1.CONFIG.BAGS_API_KEY ? 'Configured ✓' : 'Not configured'}`);
-    console.error(`[BAGSX] Wallet: ${config_1.CONFIG.SOLANA_PRIVATE_KEY ? 'Configured ✓' : 'Read-only mode'}`);
+    console.error('[BAGSX] Security: Unsigned transactions (zero custody)');
     const transport = new stdio_js_1.StdioServerTransport();
     await server.connect(transport);
     console.error('[BAGSX] Server running. Ready to accept connections.');

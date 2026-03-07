@@ -148,7 +148,7 @@ export const TOOL_DEFINITIONS = {
 
   bags_buy: {
     name: 'bags_buy',
-    description: 'Buy tokens on Bags.fm. Requires wallet to be configured. Confirm with user before executing.',
+    description: 'Prepare a buy order on Bags.fm. Returns an unsigned transaction for the user to sign in their wallet. NO PRIVATE KEY NEEDED - zero custody risk.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -165,6 +165,10 @@ export const TOOL_DEFINITIONS = {
           description: 'Max slippage tolerance as percentage',
           default: 1,
         },
+        wallet: {
+          type: 'string',
+          description: 'Optional: Wallet address for transaction simulation',
+        },
       },
       required: ['token', 'amountUsd'],
     },
@@ -172,7 +176,7 @@ export const TOOL_DEFINITIONS = {
 
   bags_sell: {
     name: 'bags_sell',
-    description: 'Sell tokens on Bags.fm. Requires wallet to be configured. Confirm with user before executing.',
+    description: 'Prepare a sell order on Bags.fm. Returns an unsigned transaction for the user to sign in their wallet. NO PRIVATE KEY NEEDED - zero custody risk.',
     inputSchema: {
       type: 'object' as const,
       properties: {
@@ -192,6 +196,10 @@ export const TOOL_DEFINITIONS = {
           type: 'number',
           description: 'Max slippage tolerance as percentage',
           default: 1,
+        },
+        wallet: {
+          type: 'string',
+          description: 'Optional: Wallet address for transaction simulation',
         },
       },
       required: ['token'],
@@ -256,6 +264,7 @@ export const BuyInputSchema = z.object({
   token: z.string().min(1),
   amountUsd: z.number().positive(),
   slippage: z.number().min(0).max(50).optional().default(1),
+  wallet: z.string().min(32).max(44).optional(),
 });
 
 export const SellInputSchema = z.object({
@@ -263,6 +272,7 @@ export const SellInputSchema = z.object({
   amount: z.number().positive().optional(),
   percentage: z.number().min(1).max(100).optional(),
   slippage: z.number().min(0).max(50).optional().default(1),
+  wallet: z.string().min(32).max(44).optional(),
 });
 
 export const CreatorEarningsInputSchema = z.object({

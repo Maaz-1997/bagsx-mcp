@@ -38,6 +38,14 @@ interface TradeResult {
     priceImpact?: number;
     error?: string;
 }
+interface UnsignedTransaction {
+    transaction: string;
+    amountIn: number;
+    amountOut: number;
+    priceImpact: number;
+    fee: number;
+    expiresAt: string;
+}
 declare class BagsClient {
     private apiKey;
     private baseUrl;
@@ -85,13 +93,15 @@ declare class BagsClient {
         fee: number;
     }>>;
     /**
-     * Execute a buy order (requires private key)
+     * Generate unsigned buy transaction (user signs in their wallet)
+     * Returns base64 transaction to sign - NO PRIVATE KEY NEEDED
      */
-    buy(tokenMint: string, amountUsd: number, slippage?: number): Promise<BagsResponse<TradeResult>>;
+    buy(tokenMint: string, amountUsd: number, slippage?: number, walletAddress?: string): Promise<BagsResponse<UnsignedTransaction>>;
     /**
-     * Execute a sell order (requires private key)
+     * Generate unsigned sell transaction (user signs in their wallet)
+     * Returns base64 transaction to sign - NO PRIVATE KEY NEEDED
      */
-    sell(tokenMint: string, amountTokens: number, slippage?: number): Promise<BagsResponse<TradeResult>>;
+    sell(tokenMint: string, amountTokens: number, slippage?: number, walletAddress?: string): Promise<BagsResponse<UnsignedTransaction>>;
     /**
      * Create token metadata (first step of launch)
      */
@@ -117,8 +127,8 @@ declare class BagsClient {
             percentages: number[];
         };
     }): Promise<BagsResponse<{
+        transaction: string;
         mint: string;
-        txHash: string;
         bagsUrl: string;
     }>>;
 }

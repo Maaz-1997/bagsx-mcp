@@ -45,6 +45,15 @@ interface TradeResult {
   error?: string;
 }
 
+interface UnsignedTransaction {
+  transaction: string; // Base64 encoded unsigned transaction
+  amountIn: number;
+  amountOut: number;
+  priceImpact: number;
+  fee: number;
+  expiresAt: string; // ISO timestamp - transaction valid for ~2 minutes
+}
+
 class BagsClient {
   private apiKey: string;
   private baseUrl: string;
@@ -188,53 +197,45 @@ class BagsClient {
   }
 
   /**
-   * Execute a buy order (requires private key)
+   * Generate unsigned buy transaction (user signs in their wallet)
+   * Returns base64 transaction to sign - NO PRIVATE KEY NEEDED
    */
   async buy(
     tokenMint: string,
     amountUsd: number,
-    slippage: number = CONFIG.DEFAULT_SLIPPAGE
-  ): Promise<BagsResponse<TradeResult>> {
-    if (!CONFIG.SOLANA_PRIVATE_KEY) {
-      return {
-        success: false,
-        error: 'SOLANA_PRIVATE_KEY not configured. Cannot execute trades.',
-      };
-    }
-
-    return this.request<TradeResult>('/trading/buy', {
+    slippage: number = CONFIG.DEFAULT_SLIPPAGE,
+    walletAddress?: string
+  ): Promise<BagsResponse<UnsignedTransaction>> {
+    // Generate unsigned transaction - user will sign it themselves
+    return this.request<UnsignedTransaction>('/trading/prepare-buy', {
       method: 'POST',
       body: JSON.stringify({
         mint: tokenMint,
         amountUsd,
         slippage,
-        // Note: In production, transaction signing happens client-side
-        // This is a simplified version
+        walletAddress, // Optional: for simulation
       }),
     });
   }
 
   /**
-   * Execute a sell order (requires private key)
+   * Generate unsigned sell transaction (user signs in their wallet)
+   * Returns base64 transaction to sign - NO PRIVATE KEY NEEDED
    */
   async sell(
     tokenMint: string,
     amountTokens: number,
-    slippage: number = CONFIG.DEFAULT_SLIPPAGE
-  ): Promise<BagsResponse<TradeResult>> {
-    if (!CONFIG.SOLANA_PRIVATE_KEY) {
-      return {
-        success: false,
-        error: 'SOLANA_PRIVATE_KEY not configured. Cannot execute trades.',
-      };
-    }
-
-    return this.request<TradeResult>('/trading/sell', {
+    slippage: number = CONFIG.DEFAULT_SLIPPAGE,
+    walletAddress?: string
+  ): Promise<BagsResponse<UnsignedTransaction>> {
+    // Generate unsigned transaction - user will sign it themselves  
+    return this.request<UnsignedTransaction>('/trading/prepare-sell', {
       method: 'POST',
       body: JSON.stringify({
         mint: tokenMint,
         amountTokens,
         slippage,
+        walletAddress, // Optional: for simulation
       }),
     });
   }
@@ -270,18 +271,12 @@ class BagsClient {
       percentages: number[];
     };
   }): Promise<BagsResponse<{
+    transaction: string; // Unsigned transaction for token launch
     mint: string;
-    txHash: string;
     bagsUrl: string;
   }>> {
-    if (!CONFIG.SOLANA_PRIVATE_KEY) {
-      return {
-        success: false,
-        error: 'SOLANA_PRIVATE_KEY not configured. Cannot launch tokens.',
-      };
-    }
-
-    return this.request('/tokens/launch', {
+    // Returns unsigned transaction - user signs themselves
+    return this.request('/tokens/prepare-launch', {
       method: 'POST',
       body: JSON.stringify(params),
     });

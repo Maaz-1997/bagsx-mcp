@@ -38,8 +38,28 @@ Talk to Claude in plain English to:
 | **10 Tools** | Trending, search, portfolio, trades, whales, quotes, buy, sell, analytics |
 | **Solana Native** | Direct integration with Bags.fm on Solana |
 | **Fee Sharing** | Supports Bags fee sharing for creator revenue |
-| **Read + Write** | View market data OR execute real trades |
-| **Secure** | Private keys stay local, never transmitted |
+| **Read + Write** | View market data OR prepare real trades |
+| **Zero Custody** | NO private keys needed - you sign in your own wallet |
+
+---
+
+## Security Model
+
+**BAGSX uses unsigned transactions** — your private keys NEVER leave your wallet:
+
+1. You ask Claude to buy/sell
+2. BAGSX generates an unsigned transaction
+3. You copy the transaction to your wallet (Phantom/Solflare)
+4. You sign and submit yourself
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Claude + MCP  │ → │  Unsigned TX    │ → │  Your Wallet    │
+│   (analysis)    │    │  (base64 blob)  │    │  (you sign)     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+**Zero custody risk.** We never see your private key.
 
 ---
 
@@ -49,6 +69,7 @@ Talk to Claude in plain English to:
 - Node.js 18+
 - [Bags API Key](https://dev.bags.fm) (free)
 - [Claude Desktop](https://claude.ai/download) or any MCP client
+- A Solana wallet (Phantom, Solflare, Backpack)
 
 ### Quick Install
 
@@ -145,13 +166,13 @@ Once connected, just talk to Claude:
 | `bags_whales` | Track large transactions |
 | `bags_creator_earnings` | View creator royalty earnings |
 
-### Trading Tools (Requires private key)
+### Trading Tools (Unsigned Transactions - Zero Custody)
 
 | Tool | Description |
 |------|-------------|
 | `bags_quote` | Get price quotes without executing |
-| `bags_buy` | Buy tokens with USD amount |
-| `bags_sell` | Sell tokens by amount or percentage |
+| `bags_buy` | Prepare buy transaction (you sign in wallet) |
+| `bags_sell` | Prepare sell transaction (you sign in wallet) |
 
 ---
 
@@ -177,29 +198,31 @@ Here are the top 5 trending tokens on Bags.fm by 24h volume:
 ...
 ```
 
-### Example 2: Executing a Trade
+### Example 2: Executing a Trade (Secure - You Sign)
 
 ```
 You: "Buy $100 of $NYAN"
 
-Claude: [Uses bags_quote, then bags_buy]
+Claude: [Uses bags_buy tool]
 
-⚠️ Trade Confirmation:
-- Buying: $NYAN
+🔐 SECURE TRADE - Your keys never leave your wallet
+
+Trade prepared:
+- Buying: $NYAN  
 - Amount: $100 USD
 - Expected tokens: ~46.3 NYAN
 - Price impact: 0.12%
-- Slippage: 1%
 
-Shall I proceed?
+**Unsigned Transaction:**
+AQAAAAAAAAAAAAAAAAAAAAm...
 
-You: "Yes"
+**To complete:**
+1. Copy transaction above
+2. Go to bags.fm/sign (or Phantom > Developer Settings)
+3. Paste and sign
+4. Submit to Solana
 
-Claude: ✅ Trade executed!
-- TX: 3xK9m...7hJq
-- Bought: 46.28 NYAN
-- Price: $2.16 per token
-- View on Solscan: [link]
+⏱️ Expires in ~2 minutes
 ```
 
 ### Example 3: Portfolio Analysis

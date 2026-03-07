@@ -102,42 +102,34 @@ class BagsClient {
         });
     }
     /**
-     * Execute a buy order (requires private key)
+     * Generate unsigned buy transaction (user signs in their wallet)
+     * Returns base64 transaction to sign - NO PRIVATE KEY NEEDED
      */
-    async buy(tokenMint, amountUsd, slippage = config_1.CONFIG.DEFAULT_SLIPPAGE) {
-        if (!config_1.CONFIG.SOLANA_PRIVATE_KEY) {
-            return {
-                success: false,
-                error: 'SOLANA_PRIVATE_KEY not configured. Cannot execute trades.',
-            };
-        }
-        return this.request('/trading/buy', {
+    async buy(tokenMint, amountUsd, slippage = config_1.CONFIG.DEFAULT_SLIPPAGE, walletAddress) {
+        // Generate unsigned transaction - user will sign it themselves
+        return this.request('/trading/prepare-buy', {
             method: 'POST',
             body: JSON.stringify({
                 mint: tokenMint,
                 amountUsd,
                 slippage,
-                // Note: In production, transaction signing happens client-side
-                // This is a simplified version
+                walletAddress, // Optional: for simulation
             }),
         });
     }
     /**
-     * Execute a sell order (requires private key)
+     * Generate unsigned sell transaction (user signs in their wallet)
+     * Returns base64 transaction to sign - NO PRIVATE KEY NEEDED
      */
-    async sell(tokenMint, amountTokens, slippage = config_1.CONFIG.DEFAULT_SLIPPAGE) {
-        if (!config_1.CONFIG.SOLANA_PRIVATE_KEY) {
-            return {
-                success: false,
-                error: 'SOLANA_PRIVATE_KEY not configured. Cannot execute trades.',
-            };
-        }
-        return this.request('/trading/sell', {
+    async sell(tokenMint, amountTokens, slippage = config_1.CONFIG.DEFAULT_SLIPPAGE, walletAddress) {
+        // Generate unsigned transaction - user will sign it themselves  
+        return this.request('/trading/prepare-sell', {
             method: 'POST',
             body: JSON.stringify({
                 mint: tokenMint,
                 amountTokens,
                 slippage,
+                walletAddress, // Optional: for simulation
             }),
         });
     }
@@ -155,13 +147,8 @@ class BagsClient {
      * Launch a new token on Bags.fm
      */
     async launchToken(params) {
-        if (!config_1.CONFIG.SOLANA_PRIVATE_KEY) {
-            return {
-                success: false,
-                error: 'SOLANA_PRIVATE_KEY not configured. Cannot launch tokens.',
-            };
-        }
-        return this.request('/tokens/launch', {
+        // Returns unsigned transaction - user signs themselves
+        return this.request('/tokens/prepare-launch', {
             method: 'POST',
             body: JSON.stringify(params),
         });

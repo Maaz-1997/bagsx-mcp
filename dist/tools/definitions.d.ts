@@ -152,6 +152,10 @@ export declare const TOOL_DEFINITIONS: {
                     description: string;
                     default: number;
                 };
+                wallet: {
+                    type: string;
+                    description: string;
+                };
             };
             required: string[];
         };
@@ -178,6 +182,10 @@ export declare const TOOL_DEFINITIONS: {
                     type: string;
                     description: string;
                     default: number;
+                };
+                wallet: {
+                    type: string;
+                    description: string;
                 };
             };
             required: string[];
@@ -272,13 +280,16 @@ export declare const BuyInputSchema: z.ZodObject<{
     token: z.ZodString;
     amountUsd: z.ZodNumber;
     slippage: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+    wallet: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     token: string;
     amountUsd: number;
     slippage: number;
+    wallet?: string | undefined;
 }, {
     token: string;
     amountUsd: number;
+    wallet?: string | undefined;
     slippage?: number | undefined;
 }>;
 export declare const SellInputSchema: z.ZodObject<{
@@ -286,13 +297,16 @@ export declare const SellInputSchema: z.ZodObject<{
     amount: z.ZodOptional<z.ZodNumber>;
     percentage: z.ZodOptional<z.ZodNumber>;
     slippage: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+    wallet: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     token: string;
     slippage: number;
+    wallet?: string | undefined;
     amount?: number | undefined;
     percentage?: number | undefined;
 }, {
     token: string;
+    wallet?: string | undefined;
     amount?: number | undefined;
     slippage?: number | undefined;
     percentage?: number | undefined;

@@ -141,7 +141,7 @@ exports.TOOL_DEFINITIONS = {
     },
     bags_buy: {
         name: 'bags_buy',
-        description: 'Buy tokens on Bags.fm. Requires wallet to be configured. Confirm with user before executing.',
+        description: 'Prepare a buy order on Bags.fm. Returns an unsigned transaction for the user to sign in their wallet. NO PRIVATE KEY NEEDED - zero custody risk.',
         inputSchema: {
             type: 'object',
             properties: {
@@ -158,13 +158,17 @@ exports.TOOL_DEFINITIONS = {
                     description: 'Max slippage tolerance as percentage',
                     default: 1,
                 },
+                wallet: {
+                    type: 'string',
+                    description: 'Optional: Wallet address for transaction simulation',
+                },
             },
             required: ['token', 'amountUsd'],
         },
     },
     bags_sell: {
         name: 'bags_sell',
-        description: 'Sell tokens on Bags.fm. Requires wallet to be configured. Confirm with user before executing.',
+        description: 'Prepare a sell order on Bags.fm. Returns an unsigned transaction for the user to sign in their wallet. NO PRIVATE KEY NEEDED - zero custody risk.',
         inputSchema: {
             type: 'object',
             properties: {
@@ -184,6 +188,10 @@ exports.TOOL_DEFINITIONS = {
                     type: 'number',
                     description: 'Max slippage tolerance as percentage',
                     default: 1,
+                },
+                wallet: {
+                    type: 'string',
+                    description: 'Optional: Wallet address for transaction simulation',
                 },
             },
             required: ['token'],
@@ -238,12 +246,14 @@ exports.BuyInputSchema = zod_1.z.object({
     token: zod_1.z.string().min(1),
     amountUsd: zod_1.z.number().positive(),
     slippage: zod_1.z.number().min(0).max(50).optional().default(1),
+    wallet: zod_1.z.string().min(32).max(44).optional(),
 });
 exports.SellInputSchema = zod_1.z.object({
     token: zod_1.z.string().min(1),
     amount: zod_1.z.number().positive().optional(),
     percentage: zod_1.z.number().min(1).max(100).optional(),
     slippage: zod_1.z.number().min(0).max(50).optional().default(1),
+    wallet: zod_1.z.string().min(32).max(44).optional(),
 });
 exports.CreatorEarningsInputSchema = zod_1.z.object({
     token: zod_1.z.string().min(1),

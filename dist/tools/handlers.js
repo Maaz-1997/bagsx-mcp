@@ -103,15 +103,34 @@ async function handleToolCall(toolName, args) {
             }
             case 'bags_buy': {
                 const input = definitions_1.BuyInputSchema.parse(args);
-                // Double-check confirmation
-                const confirmation = `⚠️ TRADE CONFIRMATION REQUIRED\n\nBuying: ${input.token}\nAmount: $${input.amountUsd} USD\nSlippage: ${input.slippage}%\n\nThis will execute a real trade. Proceed?`;
-                const result = await bags_client_1.bagsClient.buy(input.token, input.amountUsd, input.slippage);
+                const result = await bags_client_1.bagsClient.buy(input.token, input.amountUsd, input.slippage, input.wallet);
                 if (!result.success) {
-                    return formatError(result.error || 'Trade failed');
+                    return formatError(result.error || 'Failed to prepare trade');
                 }
+                const tx = result.response;
                 return formatSuccess({
-                    status: 'success',
-                    trade: result.response,
+                    status: 'unsigned_transaction_ready',
+                    trade: {
+                        type: 'BUY',
+                        token: input.token,
+                        amountUsd: input.amountUsd,
+                        expectedOutput: tx?.amountOut,
+                        priceImpact: tx?.priceImpact,
+                        fee: tx?.fee,
+                    },
+                    transaction: tx?.transaction,
+                    expiresAt: tx?.expiresAt,
+                    instructions: [
+                        '🔐 SECURE SIGNING - Your keys never leave your wallet',
+                        '',
+                        'To complete this trade:',
+                        '1. Copy the transaction string below',
+                        '2. Go to bags.fm/sign or use Phantom/Solflare',
+                        '3. Paste and sign the transaction',
+                        '4. Submit to complete the trade',
+                        '',
+                        '⏱️ Transaction expires in ~2 minutes',
+                    ].join('\\n'),
                 });
             }
             case 'bags_sell': {
@@ -119,14 +138,34 @@ async function handleToolCall(toolName, args) {
                 if (!input.amount && !input.percentage) {
                     return formatError('Must specify either amount or percentage to sell');
                 }
-                const result = await bags_client_1.bagsClient.sell(input.token, input.amount || 0, // Will be calculated from percentage
-                input.slippage);
+                const result = await bags_client_1.bagsClient.sell(input.token, input.amount || 0, input.slippage, input.wallet);
                 if (!result.success) {
-                    return formatError(result.error || 'Trade failed');
+                    return formatError(result.error || 'Failed to prepare trade');
                 }
+                const tx = result.response;
                 return formatSuccess({
-                    status: 'success',
-                    trade: result.response,
+                    status: 'unsigned_transaction_ready',
+                    trade: {
+                        type: 'SELL',
+                        token: input.token,
+                        amountTokens: input.amount,
+                        expectedOutput: tx?.amountOut,
+                        priceImpact: tx?.priceImpact,
+                        fee: tx?.fee,
+                    },
+                    transaction: tx?.transaction,
+                    expiresAt: tx?.expiresAt,
+                    instructions: [
+                        '🔐 SECURE SIGNING - Your keys never leave your wallet',
+                        '',
+                        'To complete this trade:',
+                        '1. Copy the transaction string below',
+                        '2. Go to bags.fm/sign or use Phantom/Solflare',
+                        '3. Paste and sign the transaction',
+                        '4. Submit to complete the trade',
+                        '',
+                        '⏱️ Transaction expires in ~2 minutes',
+                    ].join('\\n'),
                 });
             }
             // ==================== ANALYTICS ====================
