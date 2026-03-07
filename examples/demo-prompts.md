@@ -1,6 +1,20 @@
-# Demo Prompts for BAGSX MCP
+    # Demo Prompts for BAGSX MCP
 
 Use these prompts with Claude to test the BAGSX MCP server.
+
+## $BAGSX Token
+
+**Token Address:** `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS`
+**Buy on Bags:** https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS
+
+```
+"What's the current price of $BAGSX?"
+"Show me recent trades on $BAGSX"
+"Buy $25 of $BAGSX"
+"How many holders does $BAGSX have?"
+```
+
+---
 
 ## Discovery & Research
 

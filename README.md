@@ -9,10 +9,24 @@
 [![npm version](https://img.shields.io/npm/v/@bagsx/mcp-server?style=flat-square)](https://www.npmjs.com/package/@bagsx/mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Bags Hackathon](https://img.shields.io/badge/Bags-Hackathon%202026-ff6b6b?style=flat-square)](https://bags.fm/hackathon)
+[![$BAGSX Token](https://img.shields.io/badge/%24BAGSX-Live%20on%20Bags-00ff88?style=flat-square)](https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS)
 
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Tools](#tools) • [Examples](#examples)
+[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Tools](#tools) • [$BAGSX Token](#bagsx-token)
 
 </div>
+
+---
+
+## $BAGSX Token
+
+| Property | Value |
+|----------|-------|
+| **Token** | $BAGSX |
+| **Mint Address** | `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS` |
+| **Network** | Solana |
+| **Buy on Bags** | [bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS](https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS) |
+
+Every trade on $BAGSX generates creator fees that support ongoing development.
 
 ---
 

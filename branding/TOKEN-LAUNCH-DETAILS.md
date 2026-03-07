@@ -1,11 +1,14 @@
 # $BAGSX Token Launch Details
 
-## Token Information
+## ✅ TOKEN LAUNCHED!
 
 | Field | Value |
 |-------|-------|
 | **Name** | BAGSX |
 | **Symbol** | BAGSX |
+| **Mint Address** | `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS` |
+| **Network** | Solana |
+| **Buy Link** | https://bags.fm/BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS |
 | **Supply** | 1,000,000,000 (1 billion) |
 | **Decimals** | 9 (Solana standard) |
 
