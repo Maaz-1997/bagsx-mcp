@@ -6,7 +6,7 @@
 
 **TLDR:** We built an MCP server with 19 tools that lets Claude execute DeFi transactions on Solana. The key insight: AI handles preparation, but YOU sign. Zero custody.
 
-**GitHub:** https://github.com/chunk97-bot/bagsx-mcp
+**GitHub:** https://github.com/Maaz-1997/bagsx-mcp
 
 ---
 
@@ -67,7 +67,7 @@ The key security boundary: **Unsigned transactions**. The MCP server never has a
 
 ```bash
 # Clone the repository
-git clone https://github.com/chunk97-bot/bagsx-mcp.git
+git clone https://github.com/Maaz-1997/bagsx-mcp.git
 cd bagsx-mcp
 
 # Install dependencies
@@ -386,7 +386,7 @@ try {
 
 ## Resources
 
-- **BAGSX GitHub:** https://github.com/chunk97-bot/bagsx-mcp
+- **BAGSX GitHub:** https://github.com/Maaz-1997/bagsx-mcp
 - **MCP Docs:** https://modelcontextprotocol.io
 - **Bags API Docs:** https://docs.bags.fm
 - **$BAGSX Token:** `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS`

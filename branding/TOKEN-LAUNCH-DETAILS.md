@@ -28,7 +28,7 @@ Trade crypto with Claude using natural language. BAGSX is the first MCP (Model C
 
 Built for the $4M Bags Hackathon. First mover in AI + Creator Tokens.
 
-GitHub: github.com/chunk97-bot/bagsx-mcp
+GitHub: github.com/Maaz-1997/bagsx-mcp
 ```
 
 **Short Description (280 chars):**
@@ -108,7 +108,7 @@ Trade crypto with @AnthropicAI Claude using natural language:
 
 Built for the $4M Bags Hackathon
 
-GitHub: github.com/chunk97-bot/bagsx-mcp
+GitHub: github.com/Maaz-1997/bagsx-mcp
 Buy: bags.fm/BAGSX
 
 #Solana #AI #CreatorTokens

@@ -125,7 +125,7 @@ Talk to Claude in plain English to:
 
 ```bash
 # Clone the repo
-git clone https://github.com/chunk97-bot/bagsx-mcp.git
+git clone https://github.com/Maaz-1997/bagsx-mcp.git
 cd bagsx-mcp
 
 # Install dependencies

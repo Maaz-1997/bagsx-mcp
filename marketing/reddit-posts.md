@@ -27,8 +27,8 @@ All transactions are UNSIGNED. You get a base64 blob, paste it into Phantom/Solf
 DeFi UX is painful. Copy-pasting addresses, checking multiple dashboards, manually tracking fee claims... I wanted to just *talk* to an AI and have it do the work.
 
 **Links:**
-- GitHub: https://github.com/chunk97-bot/bagsx-mcp
-- Landing page: https://chunk97-bot.github.io/bagsx-mcp
+- GitHub: https://github.com/Maaz-1997/bagsx-mcp
+- Landing page: https://maaz-1997.github.io/bagsx-mcp
 - $BAGSX Token: `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS`
 
 It's MIT licensed, completely open source. Would love feedback from the Solana community!
@@ -65,8 +65,8 @@ Claude: Unsigned transaction ready. Copy to Phantom and sign.
 - Works with Claude Desktop or any MCP client
 
 **Links:**
-- Source: https://github.com/chunk97-bot/bagsx-mcp
-- Landing: https://chunk97-bot.github.io/bagsx-mcp
+- Source: https://github.com/Maaz-1997/bagsx-mcp
+- Landing: https://maaz-1997.github.io/bagsx-mcp
 
 Open source, MIT licensed. Happy to answer questions about MCP implementation patterns!
 
@@ -103,7 +103,7 @@ Built for the Bags Hackathon ($4M prize pool). Open source on GitHub.
 
 What do you think? Is this the future of DeFi, or is it too complex for mainstream adoption?
 
-GitHub: https://github.com/chunk97-bot/bagsx-mcp
+GitHub: https://github.com/Maaz-1997/bagsx-mcp
 
 ---
 
@@ -121,7 +121,7 @@ Built an MCP server for the Bags Hackathon. You can now:
 
 No fake data. 19 real API tools. Your keys never leave your wallet.
 
-Open source: https://github.com/chunk97-bot/bagsx-mcp
+Open source: https://github.com/Maaz-1997/bagsx-mcp
 
 Token if you want to support it: `BA6ggscnXVgfENwPGk9CXeEqKR67T9z6n64G5ue5BAGS` on Bags.fm
 
